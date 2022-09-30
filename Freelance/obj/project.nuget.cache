@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "MCisS2LlZUJunj7UnpiNvlQAznKdbg2qYNwngZOOQlFFf3gGY2jgj5EHKF8Un4TELtxCHX6i7+A+zKPPX4JQAg==",
+  "dgSpecHash": "CmMjbV35rKEGiUuud9eswuOlAglZjxbhUkoxpQIfQf5UrtFespFNfFZolfsFccX5lEq6KlUD6KJSLRJgPZaH7A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\mayst\\source\\repos\\Freelance\\Freelance\\Freelance.Api.csproj",
+  "projectFilePath": "D:\\GIT\\Freelance.Api\\Freelance\\Freelance.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mayst\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\mayst\\.nuget\\packages\\concurrenthashset\\1.1.0\\concurrenthashset.1.1.0.nupkg.sha512",

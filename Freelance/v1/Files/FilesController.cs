@@ -1,4 +1,5 @@
 ﻿using Freelance.Api.Exceptions;
+using Freelance.Api.Extensions;
 using Freelance.Api.Interfaces;
 using Freelance.Core.Models;
 using Freelance.Core.Models.Storage;
@@ -34,6 +35,7 @@ namespace Freelance.Api.v1.Files
         /// </summary>
         /// <param name="fileUuid">Уникальный ИД файла.</param>
         [HttpGet("{fileUuid}")]
+        [Authorize]
         public async Task<ActionResult> DownloadAsync([FromRoute] Guid fileUuid)
         {
             try
@@ -56,12 +58,14 @@ namespace Freelance.Api.v1.Files
         /// <param name="fileGroup">Группа файлов.</param>
         /// <returns>УИД загруженного файла.</returns>
         [HttpPost("{fileGroup}")]
+        [Authorize]
         [DisableRequestSizeLimit]
         public async Task<(int, Guid)> UploadAsync([Required] IFormFile formFile, [Required][FromRoute] FileGroupType fileGroup, string? displayName = default)
         {
             try
             {
-                var userId = await _dataContext.Users.Where(i => i.Id == 12).Select(i => (int?)i.Id).FirstOrDefaultAsync();
+                var userUuid = User.GetUserUuid();
+                var userId = await _dataContext.Users.Where(i => i.UniqueIdentifier == userUuid).Select(i => (int?)i.Id).FirstOrDefaultAsync();
 
                 using var fileStream = new MemoryStream();
                 formFile.CopyTo(fileStream);
@@ -80,6 +84,7 @@ namespace Freelance.Api.v1.Files
         /// <param name="fileUuid">Уникальный ИД файла.</param>
         /// <returns></returns>
         [HttpGet("{fileUuid}/details")]
+        [Authorize]
         public async Task<ActionResult<FileInfoResponse>> DetailsAsync([FromRoute] Guid fileUuid)
         {
             try

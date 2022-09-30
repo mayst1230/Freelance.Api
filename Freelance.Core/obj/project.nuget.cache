@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "z835fcwaJZMArTRaPuBpr08+YeIm2mSvd4wflioI4WOk6Sz+F+bbHADg0f/UDdcklmgL/Q9J/1zi236vmINCOg==",
+  "dgSpecHash": "5XEwu06h7kddkuqmu8ZsINfVk+WwZF+pBbzJx7g5CQE/4zr6rW1zeTIkiQHhs4DkbWQOwrOD9dEuPixPf96iSQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\mayst\\source\\repos\\Freelance\\Freelance.Core\\Freelance.Core.csproj",
+  "projectFilePath": "D:\\GIT\\Freelance.Api\\Freelance.Core\\Freelance.Core.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mayst\\.nuget\\packages\\efcore.namingconventions\\6.0.0\\efcore.namingconventions.6.0.0.nupkg.sha512",
     "C:\\Users\\mayst\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",

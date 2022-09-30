@@ -916,11 +916,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mayst\\source\\repos\\Freelance\\Freelance.Core\\Freelance.Core.csproj",
+      "projectUniqueName": "D:\\GIT\\Freelance.Api\\Freelance.Core\\Freelance.Core.csproj",
       "projectName": "Freelance.Core",
-      "projectPath": "C:\\Users\\mayst\\source\\repos\\Freelance\\Freelance.Core\\Freelance.Core.csproj",
+      "projectPath": "D:\\GIT\\Freelance.Api\\Freelance.Core\\Freelance.Core.csproj",
       "packagesPath": "C:\\Users\\mayst\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\mayst\\source\\repos\\Freelance\\Freelance.Core\\obj\\",
+      "outputPath": "D:\\GIT\\Freelance.Api\\Freelance.Core\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

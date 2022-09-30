@@ -4277,11 +4277,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mayst\\source\\repos\\Freelance\\Freelance\\Freelance.Api.csproj",
+      "projectUniqueName": "D:\\GIT\\Freelance.Api\\Freelance\\Freelance.Api.csproj",
       "projectName": "Freelance.Api",
-      "projectPath": "C:\\Users\\mayst\\source\\repos\\Freelance\\Freelance\\Freelance.Api.csproj",
+      "projectPath": "D:\\GIT\\Freelance.Api\\Freelance\\Freelance.Api.csproj",
       "packagesPath": "C:\\Users\\mayst\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\mayst\\source\\repos\\Freelance\\Freelance\\obj\\",
+      "outputPath": "D:\\GIT\\Freelance.Api\\Freelance\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -4301,8 +4301,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\mayst\\source\\repos\\Freelance\\Freelance.Core\\Freelance.Core.csproj": {
-              "projectPath": "C:\\Users\\mayst\\source\\repos\\Freelance\\Freelance.Core\\Freelance.Core.csproj"
+            "D:\\GIT\\Freelance.Api\\Freelance.Core\\Freelance.Core.csproj": {
+              "projectPath": "D:\\GIT\\Freelance.Api\\Freelance.Core\\Freelance.Core.csproj"
             }
           }
         }
