@@ -1,0 +1,639 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Freelance.Api</name>
+    </assembly>
+    <members>
+        <member name="T:Freelance.Api.Exceptions.ApiException">
+            <summary>
+            Класс, описывающий какое-либо бизнесовое исключение в API.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.Exceptions.ApiException.ModelField">
+            <summary>
+            Поле модели, к которому относится ошибка.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Exceptions.ApiException.#ctor(System.String)">
+            <summary>
+            Бизнесовое исключение API.
+            </summary>
+            <param name="message">Описание проблемы.</param>
+        </member>
+        <member name="M:Freelance.Api.Exceptions.ApiException.#ctor(System.String,System.String)">
+            <summary>
+            Бизнесовое исключение API.
+            </summary>
+            <param name="message">Описание проблемы.</param>
+            <param name="modelField">Поле модели.</param>
+        </member>
+        <member name="T:Freelance.Api.Exceptions.ApiForbidException">
+            <summary>
+            Класс, описывающий то, что нет доступа к данным.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Exceptions.ApiForbidException.#ctor(System.String)">
+            <summary>
+            Исключение API, что нет доступа к данным.
+            </summary>
+            <param name="message">Описание проблемы.</param>
+        </member>
+        <member name="T:Freelance.Api.Exceptions.ApiNotFoundException">
+            <summary>
+            Класс, описывающий то, что данные не найдены.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Exceptions.ApiNotFoundException.#ctor(System.String)">
+            <summary>
+            Исключение API, что данные не найдены.
+            </summary>
+            <param name="message">Описание проблемы.</param>
+        </member>
+        <member name="M:Freelance.Api.Exceptions.ApiNotFoundException.#ctor(System.String,System.String)">
+            <summary>
+            Исключение API, что данные не найдены.
+            </summary>
+            <param name="message">Описание проблемы.</param>
+            <param name="modelField">Поле модели.</param>
+        </member>
+        <member name="T:Freelance.Api.Extensions.ClaimsPrincipalExtensions">
+            <summary>
+            Методы расширения для информации о пользователе.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Extensions.ClaimsPrincipalExtensions.GetUserUuid(System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            Возвращает УИД пользователя.
+            </summary>
+            <param name="user">Сведения о пользователе.</param>
+            <returns>УИД пользователя или null.</returns>
+        </member>
+        <member name="M:Freelance.Api.Extensions.ClaimsPrincipalExtensions.GetUserRole(System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            Возвращает роль пользователя.
+            </summary>
+            <param name="user">Сведения о пользователе.</param>
+            <returns>Роль пользователя.</returns>
+        </member>
+        <member name="M:Freelance.Api.Extensions.ClaimsPrincipalExtensions.GetUserEmail(System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            Возвращает почту пользователя.
+            </summary>
+            <param name="user">Сведения о пользователе.</param>
+            <returns>Почта пользователя.</returns>
+        </member>
+        <member name="T:Freelance.Api.Extensions.QueryableExtensions">
+            <summary>
+            Методы расширения для Queryable.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Extensions.QueryableExtensions.LimitOffset``1(System.Linq.IQueryable{``0},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            Пагинация списка с проверками limit и offset.
+            </summary>
+            <typeparam name="T">Тип элементов списка.</typeparam>
+            <param name="list">Список, для которого требуется пагинация.</param>
+            <param name="limit">Количество записей, возвращаемое в запросе.</param>
+            <param name="offset">Количество записей для пропуска.</param>
+            <returns>Пагигинированный список.</returns>
+        </member>
+        <member name="T:Freelance.Api.Extensions.ServiceCollectionExtensions">
+            <summary>
+            Методы расширения для настройки контейнера DI.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Extensions.ServiceCollectionExtensions.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Настройка служб в контейнере DI.
+            </summary>
+            <param name="services">Коллекция сервисов в контейнере DI.</param>
+            <param name="configuration">Конфигурация среды.</param>
+        </member>
+        <member name="M:Freelance.Api.Extensions.ServiceCollectionExtensions.ConfigureCustomServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Настройка самописных сервисов.
+            </summary>
+            <param name="services">Коллекция сервисов в контейнере DI.</param>
+            <param name="configuration">Конфигурация среды.</param>
+        </member>
+        <member name="M:Freelance.Api.Extensions.ServiceCollectionExtensions.ConfigureSwagger(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Настройка Swagger.
+            </summary>
+            <param name="services">Коллекция сервисов в контейнере DI.</param>
+        </member>
+        <member name="M:Freelance.Api.Extensions.ServiceCollectionExtensions.ConfigureDatabase(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Настройка доступа к базе данных.
+            </summary>
+            <param name="services">Коллекция сервисов в контейнере DI.</param>
+            <param name="configuration">Конфигурация среды.</param>
+        </member>
+        <member name="M:Freelance.Api.Extensions.ServiceCollectionExtensions.ConfigureBase(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Настройка базовых сервисов.
+            </summary>
+            <param name="services">Коллекция сервисов в контейнере DI.</param>
+            <param name="configuration">Конфигурация среды.</param>
+        </member>
+        <member name="M:Freelance.Api.Extensions.ServiceCollectionExtensions.ConfigureApiBase(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Настройка базовых сервисов для работы API.
+            </summary>
+            <param name="services">Коллекция сервисов в контейнере DI.</param>
+        </member>
+        <member name="M:Freelance.Api.Extensions.ServiceCollectionExtensions.ConfigureApiAuthorization(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Настройка авторизации для API.
+            </summary>
+            <param name="services">Коллекция сервисов в контейнере DI.</param>
+            <param name="configuration">Конфигурация среды.</param>
+        </member>
+        <member name="T:Freelance.Api.Extensions.WebApplicationExtensions">
+            <summary>
+            Методы расширения для веб-приложения.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Extensions.WebApplicationExtensions.Configure(Microsoft.AspNetCore.Builder.WebApplication,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Конфигурация pipeline.
+            </summary>
+            <param name="app">Настраиваемое веб-прилоежние.</param>
+            <param name="configuration">Конфигурация среды.</param>
+        </member>
+        <member name="T:Freelance.Api.Interfaces.IFileStorage">
+            <summary>
+            Хранилище файлов.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Interfaces.IFileStorage.GetContentAsync(System.Guid)">
+            <summary>
+            Получение содержимого файла.
+            </summary>
+            <param name="fileUuid">Уникальный ИД файла.</param>
+            <returns>Данные и mime-тип.</returns>
+        </member>
+        <member name="M:Freelance.Api.Interfaces.IFileStorage.GetDetailsAsync(System.Guid)">
+            <summary>
+            Получение информации о файле.
+            </summary>
+            <param name="fileUuid">Уникальный ИД файла.</param>
+            <returns>Информацию о файле.</returns>
+        </member>
+        <member name="M:Freelance.Api.Interfaces.IFileStorage.UploadAsync(System.IO.MemoryStream,System.String,System.String,Freelance.Core.Models.Storage.FileGroupType,System.String,System.Nullable{System.Int32})">
+            <summary>
+            Загрузка файла на сервер.
+            </summary>
+            <param name="data">Поток данных.</param>
+            <param name="contentType">Тип файла.</param>
+            <param name="fileName">Имя файла.</param>
+            <param name="fileGroup">Группа файлов.</param>
+            <param name="displayName">Описание файла.</param>
+            <param name="createdBy">Кем создан файл.</param>
+            <returns>УИД загруженного файла.</returns>
+        </member>
+        <member name="T:Freelance.Api.Interfaces.IJwtHandler">
+            <summary>
+            Токен доступа.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Interfaces.IJwtHandler.GenerateToken(Freelance.Core.Models.Storage.User)">
+            <summary>
+            Генерация токена доступа.
+            </summary>
+            <param name="user">Пользователь.</param>
+            <returns>Токен доступа.</returns>
+        </member>
+        <member name="T:Freelance.Api.Models.ApiErrorResponse">
+            <summary>
+            Бизнесовая ошибка от API.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.Models.ApiErrorResponse.Errors">
+            <summary>
+            Список ошибок, где ключ - имя параметра, а значение - текст ошибок этого параметра.
+            Если параметр string.Empty, то ошибка общая.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.Models.ApiErrorResponseFilter">
+            <summary>
+            Фильтр для операций API для обработки исключений.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.Models.CommonOptions">
+            <summary>
+            Основные настройки системы.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.Models.CommonOptions.BaseUrl">
+            <summary>
+            Базовый URL сайта.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.Services.DataContextFileStorage">
+            <summary>
+            Хранилище файлов в БД.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Services.DataContextFileStorage.GetContentAsync(System.Guid)">
+            <summary>
+            Получение содержимого файла.
+            </summary>
+            <param name="fileUuid">Уникальный ИД файла.</param>
+            <returns>Содержимое файла.</returns>
+            <exception cref="T:System.IO.FileNotFoundException"></exception>
+        </member>
+        <member name="M:Freelance.Api.Services.DataContextFileStorage.GetDetailsAsync(System.Guid)">
+            <summary>
+            Получение информации о файле.
+            </summary>
+            <param name="fileUuid">Уникальный ИД файла.</param>
+            <returns>Информация о файле.</returns>
+        </member>
+        <member name="M:Freelance.Api.Services.DataContextFileStorage.UploadAsync(System.IO.MemoryStream,System.String,System.String,Freelance.Core.Models.Storage.FileGroupType,System.String,System.Nullable{System.Int32})">
+            <summary>
+            Загрузка файла на сервер.
+            </summary>
+            <param name="data">Данные файла.</param>
+            <param name="contentType">MIME-тип</param>
+            <param name="fileName">Название файла.</param>
+            <param name="fileGroup">Группа файла.</param>
+            <param name="displayName">Описание файла.</param>
+            <param name="createdBy">Кем создан файл.</param>
+            <returns>УИД загруженного файла.</returns>
+        </member>
+        <member name="T:Freelance.Api.Services.JwtHandlerService">
+            <summary>
+            Служба для работы с токенами доступа.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Services.JwtHandlerService.GenerateToken(Freelance.Core.Models.Storage.User)">
+            <summary>
+            Генерация токена доступа.
+            </summary>
+            <param name="user">Пользователь.</param>
+            <returns>Токен доступа.</returns>
+        </member>
+        <member name="T:Freelance.Api.Services.SwaggerGenApiOptions">
+            <summary>
+            Конфигурация Swagger.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Services.SwaggerGenApiOptions.Configure(Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenOptions)">
+            <summary>
+            Базовая конфигурация.
+            </summary>
+            <param name="options">Опции Swagger.</param>
+        </member>
+        <member name="M:Freelance.Api.Services.SwaggerGenApiOptions.CreateInfoForApiVersion(Microsoft.AspNetCore.Mvc.ApiExplorer.ApiVersionDescription)">
+            <summary>
+            Базовая информация.
+            </summary>
+            <param name="description">Описание API.</param>
+            <returns>Базовую информацию.</returns>
+        </member>
+        <member name="T:Freelance.Api.Services.OrderTagsDocumentFilter">
+            <summary>
+            Фильтрация методов.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Files.FileInfoResponse">
+            <summary>
+            Информация о файле.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Files.FileInfoResponse.FileName">
+            <summary>
+            Имя файла.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Files.FileInfoResponse.DisplayName">
+            <summary>
+            Описание.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Files.FileInfoResponse.MimeType">
+            <summary>
+            MIME-тип.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Files.FileInfoResponse.Size">
+            <summary>
+            Размер файла.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Files.FileInfoResponse.GroupType">
+            <summary>
+            Группа файлов.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Files.FileInfoResponse.Url">
+            <summary>
+            Ссылка на скачивание файла.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Files.FilesController">
+            <summary>
+            Работа с файлами.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.v1.Files.FilesController.DownloadAsync(System.Guid)">
+            <summary>
+            Cкачивание файла по его уникальному ИД.
+            </summary>
+            <param name="fileUuid">Уникальный ИД файла.</param>
+        </member>
+        <member name="M:Freelance.Api.v1.Files.FilesController.UploadAsync(Microsoft.AspNetCore.Http.IFormFile,Freelance.Core.Models.Storage.FileGroupType,System.String)">
+            <summary>
+            Загрузка файла.
+            </summary>
+            <param name="formFile">Файл для загрузки.</param>
+            <param name="displayName">Описание файла.</param>
+            <param name="fileGroup">Группа файлов.</param>
+            <returns>УИД загруженного файла.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Files.FilesController.DetailsAsync(System.Guid)">
+            <summary>
+            Получение информации о файле.
+            </summary>
+            <param name="fileUuid">Уникальный ИД файла.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Freelance.Api.v1.Users.UserItem">
+            <summary>
+            Пользователь.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserItem.UniqueIdentifier">
+            <summary>
+            Уникальный ИД.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserItem.UserName">
+            <summary>
+            Имя пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserItem.Password">
+            <summary>
+            Пароль.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserItem.FirstName">
+            <summary>
+            Имя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserItem.LastName">
+            <summary>
+            Фамилия.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserItem.MiddleName">
+            <summary>
+            Отчество.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserItem.Role">
+            <summary>
+            Роль.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserItem.Email">
+            <summary>
+            Email-адрес.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserItem.Rating">
+            <summary>
+            Рейтинг.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserItem.PhotoFileId">
+            <summary>
+            ИД файла с фото профиля.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserItem.IsBanned">
+            <summary>
+            Пользователь заблокирован.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserItem.IsDeleted">
+            <summary>
+            Пользователь удален.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserItem.Created">
+            <summary>
+            Дата и время создания записи.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserItem.Updated">
+            <summary>
+            Дата и время обновления записи.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Users.UserListRequest">
+            <summary>
+            Запрос на список пользователей.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserListRequest.Limit">
+            <summary>
+            Количество записей.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserListRequest.Offset">
+            <summary>
+            Отступ от начала списка.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserListRequest.UserUniqueIdentifier">
+            <summary>
+            УИД пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserListRequest.UserName">
+            <summary>
+            Имя пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserListRequest.Email">
+            <summary>
+            Почта.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserListRequest.FirstName">
+            <summary>
+            Имя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserListRequest.LastName">
+            <summary>
+            Фамилия.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserListRequest.MiddleName">
+            <summary>
+            Отчество.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserListRequest.Rating">
+            <summary>
+            Рейтинг.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserListRequest.Role">
+            <summary>
+            Роль.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserListRequest.IsDeleted">
+            <summary>
+            Пользователь удален.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserListRequest.IsBanned">
+            <summary>
+            Пользователь заблокирован.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Users.UserListResponse">
+            <summary>
+            Ответ на запрос списка пользователей.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserListResponse.TotalCount">
+            <summary>
+            Общее количество элементов.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserListResponse.Items">
+            <summary>
+            Элементы ответа.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Users.UserLoginRequest">
+            <summary>
+            Запрос на авторизацию пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserLoginRequest.UserName">
+            <summary>
+            Имя пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserLoginRequest.Password">
+            <summary>
+            Пароль.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Users.UserRegisterRequest">
+            <summary>
+            Запрос на регистрацию пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserRegisterRequest.UserName">
+            <summary>
+            Имя пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserRegisterRequest.Password">
+            <summary>
+            Пароль.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserRegisterRequest.FirstName">
+            <summary>
+            Имя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserRegisterRequest.MiddleName">
+            <summary>
+            Отчество.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserRegisterRequest.LastName">
+            <summary>
+            Фамилия.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserRegisterRequest.Email">
+            <summary>
+            Email-адрес.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserRegisterRequest.PhotoPhileId">
+            <summary>
+            ИД файла с фото профиля.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserRegisterRequest.Role">
+            <summary>
+            Роль.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Users.UsersController">
+            <summary>
+            Работа с пользователями.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.v1.Users.UsersController.ListAsync(Freelance.Api.v1.Users.UserListRequest)">
+            <summary>
+            Список пользователей.
+            </summary>
+            <param name="request">Данные запроса.</param>
+            <returns>Список пользователей.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Users.UsersController.RegisterAsync(Freelance.Api.v1.Users.UserRegisterRequest)">
+            <summary>
+            Регистрация пользователя.
+            </summary>
+            <param name="request">Данные запроса.</param>
+            <returns>Данные о зарегистрированном пользователе.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Users.UsersController.LoginAsync(Freelance.Api.v1.Users.UserLoginRequest)">
+            <summary>
+            Авторизация пользователя.
+            </summary>
+            <param name="request">Данные запроса.</param>
+            <returns>Данные об авторизованном пользователе.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Users.UsersController.DetailsAsync(System.Guid)">
+            <summary>
+            Получение сведений о пользователе.
+            </summary>
+            <param name="userUuid">УИД пользователя.</param>
+            <returns>Сведения о пользователе.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Users.UsersController.DeleteAsync(System.Guid)">
+            <summary>
+            Удаление пользователя.
+            </summary>
+            <param name="userUuid">УИД пользователя.</param>
+            <returns>Данные об удаленном пользователе.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Users.UsersController.BlockAsync(System.Guid)">
+            <summary>
+            Блокировка пользователя.
+            </summary>
+            <param name="userUuid">УИД пользователя.</param>
+            <returns>Данные о заблокированном пользователе.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Users.UsersController.GetUserInfo(Freelance.Core.Models.Storage.User)">
+            <summary>
+            Получение данных о пользователе.
+            </summary>
+            <param name="user">Пользователь.</param>
+            <returns>Данные о пользователе.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Users.UsersController.CreateUserBalanceAsync(System.Int32)">
+            <summary>
+            Создание счёта пользователя.
+            </summary>
+            <param name="userId">ИД пользователя.</param>
+            <returns>Результат создания счёта пользователя.</returns>
+        </member>
+    </members>
+</doc>

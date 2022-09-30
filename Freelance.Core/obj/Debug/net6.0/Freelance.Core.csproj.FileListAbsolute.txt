@@ -1,0 +1,15 @@
+C:\Users\mayst\source\repos\Freelance\Freelance.Core\bin\Debug\net6.0\Freelance.Core.deps.json
+C:\Users\mayst\source\repos\Freelance\Freelance.Core\bin\Debug\net6.0\Freelance.Core.dll
+C:\Users\mayst\source\repos\Freelance\Freelance.Core\bin\Debug\net6.0\ref\Freelance.Core.dll
+C:\Users\mayst\source\repos\Freelance\Freelance.Core\bin\Debug\net6.0\Freelance.Core.pdb
+C:\Users\mayst\source\repos\Freelance\Freelance.Core\obj\Debug\net6.0\Freelance.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mayst\source\repos\Freelance\Freelance.Core\obj\Debug\net6.0\Freelance.Core.AssemblyInfoInputs.cache
+C:\Users\mayst\source\repos\Freelance\Freelance.Core\obj\Debug\net6.0\Freelance.Core.AssemblyInfo.cs
+C:\Users\mayst\source\repos\Freelance\Freelance.Core\obj\Debug\net6.0\Freelance.Core.csproj.CoreCompileInputs.cache
+C:\Users\mayst\source\repos\Freelance\Freelance.Core\obj\Debug\net6.0\EFCoreNpgsqlNetTopologySuite.cs
+C:\Users\mayst\source\repos\Freelance\Freelance.Core\obj\Debug\net6.0\Freelance.Core.dll
+C:\Users\mayst\source\repos\Freelance\Freelance.Core\obj\Debug\net6.0\ref\Freelance.Core.dll
+C:\Users\mayst\source\repos\Freelance\Freelance.Core\obj\Debug\net6.0\Freelance.Core.pdb
+C:\Users\mayst\source\repos\Freelance\Freelance.Core\bin\Debug\net6.0\Freelance.Core.runtimeconfig.json
+C:\Users\mayst\source\repos\Freelance\Freelance.Core\obj\Debug\net6.0\Freelance.Core.genruntimeconfig.cache
+C:\Users\mayst\source\repos\Freelance\Freelance.Core\obj\Debug\net6.0\Freelance.Core.csproj.AssemblyReference.cache
