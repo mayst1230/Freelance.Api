@@ -32,5 +32,5 @@ public interface IFileStorage
     /// <param name="displayName">Описание файла.</param>
     /// <param name="createdBy">Кем создан файл.</param>
     /// <returns>УИД загруженного файла.</returns>
-    Task<(int, Guid)> UploadAsync(MemoryStream data, string contentType, string fileName, FileGroupType fileGroup, string? displayName = default, int? createdBy = default);
+    Task<int> UploadAsync(MemoryStream data, string contentType, string fileName, FileGroupType fileGroup, string? displayName = default, int? createdBy = default);
 }

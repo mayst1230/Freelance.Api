@@ -1,4 +1,5 @@
-﻿using Freelance.Core.Models.Storage;
+﻿using Freelance.Api.v1.ReferenceItems;
+using Freelance.Core.Models.Storage;
 using System.ComponentModel.DataAnnotations;
 
 namespace Freelance.Api.v1.Users;
@@ -19,11 +20,6 @@ public class UserItem
     /// </summary>
     [Required]
     public string UserName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Пароль.
-    /// </summary>
-    public string? Password { get; set; }
 
     /// <summary>
     /// Имя.
@@ -58,9 +54,9 @@ public class UserItem
     public decimal? Rating { get; set; }
 
     /// <summary>
-    /// ИД файла с фото профиля.
+    /// Файл с фото профиля.
     /// </summary>
-    public int? PhotoFileId { get; set; }
+    public FileReferenceItem? PhotoFile { get; set; }
 
     /// <summary>
     /// Пользователь заблокирован.

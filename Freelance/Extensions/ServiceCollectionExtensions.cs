@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Freelance.Api.Services.Fakes;
 
 namespace Freelance.Api.Extensions;
 
@@ -44,6 +45,17 @@ public static class ServiceCollectionExtensions
     private static void ConfigureCustomServices(IServiceCollection services, IConfiguration configuration)
     {
         services.AddTransient<Interfaces.IFileStorage, DataContextFileStorage>();
+        services.AddTransient<Interfaces.IUserService, UserService>();
+        services.AddTransient<Interfaces.IEmailSender, EmailSenderService>();
+
+        if (configuration.GetValue<bool>("UseFakes") == true)
+        {
+            services.AddTransient<Interfaces.IPaymentService, FakePaymentService>();
+        }
+        else
+        {
+            // ... Add not fake service for "IsNotDevelopment" environment... \\
+        }
     }
 
     /// <summary>
@@ -84,7 +96,6 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-        services.Configure<CommonOptions>(configuration);
     }
 
     /// <summary>

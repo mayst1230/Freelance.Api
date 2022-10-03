@@ -32,20 +32,20 @@ public class UserEditRequest
     public string FirstName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Отчество.
-    /// </summary>
-    [Required]
-    [MinLength(2)]
-    [MaxLength(100)]
-    public string MiddleName { get; set; } = string.Empty;
-
-    /// <summary>
     /// Фамилия.
     /// </summary>
     [Required]
     [MinLength(2)]
     [MaxLength(100)]
     public string LastName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Отчество.
+    /// </summary>
+    [Required]
+    [MinLength(2)]
+    [MaxLength(100)]
+    public string MiddleName { get; set; } = string.Empty;
 
     /// <summary>
     /// Email-адрес.
@@ -57,5 +57,5 @@ public class UserEditRequest
     /// <summary>
     /// ИД файла с фото профиля.
     /// </summary>
-    public int? PhotoPhileId { get; set; }
+    public int? PhotoFileId { get; set; }
 }

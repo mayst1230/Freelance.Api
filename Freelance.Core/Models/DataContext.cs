@@ -65,7 +65,7 @@ public class DataContext : DbContext
         {
             e.Property(i => i.UniqueIdentifier).HasDefaultValueSql("gen_random_uuid()");
             e.HasIndex(i => new { i.UniqueIdentifier }).IsUnique().HasDatabaseName("ix_uq_user");
-            e.HasOne<Storage.File>().WithMany().HasForeignKey(i => i.PhotoFileId).OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(i => i.PhotoFile).WithMany().HasForeignKey(i => i.PhotoFileId).OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<Storage.File>(e =>
@@ -101,8 +101,8 @@ public class DataContext : DbContext
         {
             e.Property(i => i.UniqueIdentifier).HasDefaultValueSql("gen_random_uuid()");
             e.HasIndex(i => i.UniqueIdentifier).IsUnique().HasDatabaseName("ix_uq_feedback");
-            e.HasOne<User>().WithMany().HasForeignKey(i => i.UserId).OnDelete(DeleteBehavior.Restrict);
-            e.HasOne<User>().WithMany().HasForeignKey(i => i.CreatedBy).OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(i => i.User).WithMany().HasForeignKey(i => i.UserId).OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(i => i.CreatedByUser).WithMany().HasForeignKey(i => i.CreatedBy).OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

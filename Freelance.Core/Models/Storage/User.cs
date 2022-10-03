@@ -75,11 +75,16 @@ public class User
     public int? PhotoFileId { get; set; }
 
     /// <summary>
-    /// Рейтинг.
+    /// Общий рейтинг.
     /// </summary>
     [Required]
-    [Column(TypeName = "decimal(1, 1)")]
+    [Column(TypeName = "decimal(2, 1)")]
     public decimal Rating { get; set; }
+
+    /// <summary>
+    /// Код для восстановления пароля.
+    /// </summary>
+    public string? RestorePasswordCode { get; set; }
 
     /// <summary>
     /// Пользователь заблокирован.
@@ -102,6 +107,11 @@ public class User
     /// Дата и время обновления записи.
     /// </summary>
     public DateTimeOffset Updated { get; set; }
+
+    /// <summary>
+    /// Файл с фото профиля.
+    /// </summary>
+    public virtual File? PhotoFile { get; set; }
 }
 
 public enum UserRole

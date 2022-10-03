@@ -16,15 +16,14 @@ namespace Freelance.Api.v1.Files
     [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
-    [Authorize]
     public class FilesController : ControllerBase
     {
         private readonly DataContext _dataContext;
         private readonly IFileStorage _fileStorage;
 
         public FilesController(
-        DataContext dataContext,
-        IFileStorage fileStorage)
+            DataContext dataContext,
+            IFileStorage fileStorage)
         {
             _dataContext = dataContext;
             _fileStorage = fileStorage;
@@ -35,7 +34,6 @@ namespace Freelance.Api.v1.Files
         /// </summary>
         /// <param name="fileUuid">Уникальный ИД файла.</param>
         [HttpGet("{fileUuid}")]
-        [Authorize]
         public async Task<ActionResult> DownloadAsync([FromRoute] Guid fileUuid)
         {
             try
@@ -51,22 +49,35 @@ namespace Freelance.Api.v1.Files
         }
 
         /// <summary>
+        /// Удаление файла по его УИД.
+        /// </summary>
+        /// <param name="fileUuid">УИД файла.</param>
+        /// <returns></returns>
+        [HttpDelete("{fileUuid}")]
+        [Authorize]
+        public async Task DeleteAsync([FromRoute] Guid fileUuid)
+        {
+            var file = await _dataContext.Files.Where(i => i.UniqueIdentifier == fileUuid).FirstOrDefaultAsync() 
+                ?? throw new FileNotFoundException();
+
+            file.IsDeleted = true;
+            await _dataContext.SaveChangesAsync();
+        }
+
+        /// <summary>
         /// Загрузка файла.
         /// </summary>
         /// <param name="formFile">Файл для загрузки.</param>
         /// <param name="displayName">Описание файла.</param>
         /// <param name="fileGroup">Группа файлов.</param>
-        /// <returns>УИД загруженного файла.</returns>
+        /// <returns>ИД загруженного файла.</returns>
         [HttpPost("{fileGroup}")]
-        [Authorize]
         [DisableRequestSizeLimit]
-        public async Task<(int, Guid)> UploadAsync([Required] IFormFile formFile, [Required][FromRoute] FileGroupType fileGroup, string? displayName = default)
+        public async Task<int> UploadAsync([Required] IFormFile formFile, [Required][FromRoute] FileGroupType fileGroup, string? displayName = default)
         {
             try
             {
-                var userUuid = User.GetUserUuid();
-                var userId = await _dataContext.Users.Where(i => i.UniqueIdentifier == userUuid).Select(i => (int?)i.Id).FirstOrDefaultAsync();
-
+                var userId = User.GetUserId();
                 using var fileStream = new MemoryStream();
                 formFile.CopyTo(fileStream);
 
@@ -84,7 +95,6 @@ namespace Freelance.Api.v1.Files
         /// <param name="fileUuid">Уникальный ИД файла.</param>
         /// <returns></returns>
         [HttpGet("{fileUuid}/details")]
-        [Authorize]
         public async Task<ActionResult<FileInfoResponse>> DetailsAsync([FromRoute] Guid fileUuid)
         {
             try

@@ -9,7 +9,7 @@ namespace Freelance.Api.Extensions;
 public static class WebApplicationExtensions
 {
     /// <summary>
-    /// Конфигурация pipeline.
+    /// Конфигурация Pipeline.
     /// </summary>
     /// <param name="app">Настраиваемое веб-прилоежние.</param>
     /// <param name="configuration">Конфигурация среды.</param>

@@ -76,7 +76,7 @@ public enum TypeGroup
     /// <summary>
     /// Пополнение баланса.
     /// </summary>
-    Replenishmen = 1,
+    Replenishment = 1,
 
     /// <summary>
     /// Вывод средств.

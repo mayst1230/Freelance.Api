@@ -36,6 +36,13 @@ public class Feedback
     public string Text { get; set; } = string.Empty;
 
     /// <summary>
+    /// Оценка пользователя, к которому относится отзыв.
+    /// </summary>
+    [Required]
+    [Column(TypeName = "decimal(2, 1)")]
+    public decimal UserRating { get; set; }
+
+    /// <summary>
     /// Запись удалена.
     /// </summary>
     [Required]
@@ -58,5 +65,15 @@ public class Feedback
     /// </summary>
     [Required]
     public DateTimeOffset Updated { get; set; }
+
+    /// <summary>
+    /// Пользователь, создавший отзыв.
+    /// </summary>
+    public virtual User CreatedByUser { get; set; } = null!;
+
+    /// <summary>
+    /// Пользователь, к которому относится отзыв.
+    /// </summary>
+    public virtual User User { get; set; } = null!;
 }
 

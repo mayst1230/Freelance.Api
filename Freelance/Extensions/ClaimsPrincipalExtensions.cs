@@ -7,7 +7,23 @@ namespace Freelance.Api.Extensions;
 /// </summary>
 public static class ClaimsPrincipalExtensions
 {
+    public const string CLAIM_USER_ID = "id";
     public const string CLAIM_USER_UUID = "uuid";
+
+    /// <summary>
+    /// Возвращает ИД пользователя.
+    /// </summary>
+    /// <param name="user">Сведения о пользователе.</param>
+    /// <returns>ИД пользователя или null.</returns>
+    public static int? GetUserId(this ClaimsPrincipal user)
+    {
+        if (int.TryParse(user.FindFirstValue(CLAIM_USER_ID), out var userUuid))
+        {
+            return userUuid;
+        }
+
+        return null;
+    }
 
     /// <summary>
     /// Возвращает УИД пользователя.
