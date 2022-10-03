@@ -84,7 +84,11 @@ public class SwaggerGenApiOptions : IConfigureOptions<SwaggerGenOptions>
         {
             Title = "Freelance API",
             Version = description.ApiVersion.ToString(),
-            Contact = new OpenApiContact() { Name = "Yury Mayorov", Email = "mayst1230@gmail.com" },
+            Contact = new OpenApiContact() 
+            { 
+                Name = "Yury Mayorov", 
+                Email = "mayst1230@gmail.com" 
+            },
         };
 
         return info;

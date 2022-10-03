@@ -1,4 +1,5 @@
-﻿using Freelance.Api.Interfaces;
+﻿using Freelance.Api.Extensions;
+using Freelance.Api.Interfaces;
 using Freelance.Core.Models.Storage;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -31,13 +32,15 @@ public class JwtHandlerService : IJwtHandler
 
         var claims = new[]
         {
-                new Claim("uuid", user.UniqueIdentifier.ToString()),
+                new Claim(ClaimsPrincipalExtensions.CLAIM_USER_ID, user.Id.ToString()),
+                new Claim(ClaimsPrincipalExtensions.CLAIM_USER_UUID, user.UniqueIdentifier.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role.ToString())
             };
 
-        var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
+        var token = new JwtSecurityToken(
+          _configuration["Jwt:Issuer"],
           _configuration["Jwt:Audience"],
           claims,
           expires: DateTime.Now.AddDays(1),

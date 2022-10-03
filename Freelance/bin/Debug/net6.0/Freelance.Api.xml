@@ -61,6 +61,13 @@
             Методы расширения для информации о пользователе.
             </summary>
         </member>
+        <member name="M:Freelance.Api.Extensions.ClaimsPrincipalExtensions.GetUserId(System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            Возвращает ИД пользователя.
+            </summary>
+            <param name="user">Сведения о пользователе.</param>
+            <returns>ИД пользователя или null.</returns>
+        </member>
         <member name="M:Freelance.Api.Extensions.ClaimsPrincipalExtensions.GetUserUuid(System.Security.Claims.ClaimsPrincipal)">
             <summary>
             Возвращает УИД пользователя.
@@ -156,10 +163,23 @@
         </member>
         <member name="M:Freelance.Api.Extensions.WebApplicationExtensions.Configure(Microsoft.AspNetCore.Builder.WebApplication,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
-            Конфигурация pipeline.
+            Конфигурация Pipeline.
             </summary>
             <param name="app">Настраиваемое веб-прилоежние.</param>
             <param name="configuration">Конфигурация среды.</param>
+        </member>
+        <member name="T:Freelance.Api.Interfaces.IEmailSender">
+            <summary>
+            Рассылка писем.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Interfaces.IEmailSender.SendEmailRestorePasswordCode(System.String,System.String)">
+            <summary>
+            Отправка сообщения на почту для восстановления пароля.
+            </summary>
+            <param name="email">Почта.</param>
+            <param name="code">Код для восстановления.</param>
+            <returns>Сообщение отправлено.</returns>
         </member>
         <member name="T:Freelance.Api.Interfaces.IFileStorage">
             <summary>
@@ -204,6 +224,41 @@
             <param name="user">Пользователь.</param>
             <returns>Токен доступа.</returns>
         </member>
+        <member name="T:Freelance.Api.Interfaces.IPaymentService">
+            <summary>
+            Платежная система.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Interfaces.IPaymentService.Replenishment(System.String,System.String,System.Decimal)">
+            <summary>
+            Пополнение счета пользователя.
+            </summary>
+            <param name="cardNumber">Номер карты.</param>
+            <param name="cvc">CVC-код.</param>
+            <param name="amountReplishment">Сумма пополнения.</param>
+            <returns>Операция прошла успешно.</returns>
+        </member>
+        <member name="M:Freelance.Api.Interfaces.IPaymentService.Withdrawal(System.String,System.Decimal)">
+            <summary>
+            Вывод средств со счета пользователя.
+            </summary>
+            <param name="cardNumber">Номер карты.</param>
+            <param name="amountWithdrawal">Сумма для вывода.</param>
+            <returns>Операция прошла успешно.</returns>
+        </member>
+        <member name="T:Freelance.Api.Interfaces.IUserService">
+            <summary>
+            Пользователи.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Interfaces.IUserService.GetUserInfo(Freelance.Core.Models.Storage.User,System.Boolean)">
+            <summary>
+            Сведения о пользователе.
+            </summary>
+            <param name="user">Пользователь</param>
+            <param name="generateAccessToken">Сгенрировать токен доступа.</param>
+            <returns>Сведения о пользователе.</returns>
+        </member>
         <member name="T:Freelance.Api.Models.ApiErrorResponse">
             <summary>
             Бизнесовая ошибка от API.
@@ -218,16 +273,6 @@
         <member name="T:Freelance.Api.Models.ApiErrorResponseFilter">
             <summary>
             Фильтр для операций API для обработки исключений.
-            </summary>
-        </member>
-        <member name="T:Freelance.Api.Models.CommonOptions">
-            <summary>
-            Основные настройки системы.
-            </summary>
-        </member>
-        <member name="P:Freelance.Api.Models.CommonOptions.BaseUrl">
-            <summary>
-            Базовый URL сайта.
             </summary>
         </member>
         <member name="T:Freelance.Api.Services.DataContextFileStorage">
@@ -261,6 +306,24 @@
             <param name="displayName">Описание файла.</param>
             <param name="createdBy">Кем создан файл.</param>
             <returns>УИД загруженного файла.</returns>
+        </member>
+        <member name="T:Freelance.Api.Services.EmailSenderService">
+            <summary>
+            Служба для рассылки писем.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Services.EmailSenderService.SendEmailRestorePasswordCode(System.String,System.String)">
+            <summary>
+            Отправка сообщения на почту для восстановления пароля.
+            </summary>
+            <param name="email">Почта.</param>
+            <param name="code">Код для восстановления.</param>
+            <returns>Сообщение отправлено.</returns>
+        </member>
+        <member name="T:Freelance.Api.Services.Fakes.FakePaymentService">
+            <summary>
+            Фейковая служба для работы с платежной системой.
+            </summary>
         </member>
         <member name="T:Freelance.Api.Services.JwtHandlerService">
             <summary>
@@ -296,6 +359,238 @@
             <summary>
             Фильтрация методов.
             </summary>
+        </member>
+        <member name="T:Freelance.Api.Services.UserService">
+            <summary>
+            Служба для работы с пользователями.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.Services.UserService.GetUserInfo(Freelance.Core.Models.Storage.User,System.Boolean)">
+            <summary>
+            Сведения о пользователе.
+            </summary>
+            <param name="user">Пользователь</param>
+            <param name="generateAccessToken">Сгенрировать токен доступа.</param>
+            <returns>Сведения о пользователе.</returns>
+        </member>
+        <member name="T:Freelance.Api.v1.Admins.AdminsController">
+            <summary>
+            Работа с администраторами.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.v1.Admins.AdminsController.DeleteAsync(System.Guid)">
+            <summary>
+            Удаление пользователя.
+            </summary>
+            <param name="userUuid">УИД пользователя.</param>
+            <returns>Данные об удаленном пользователе.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Admins.AdminsController.RestoreAsync(System.Guid)">
+            <summary>
+            Восстановление пользователя.
+            </summary>
+            <param name="userUuid">УИД пользователя.</param>
+            <returns>Данные об восстановленном пользователе.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Admins.AdminsController.BlockAsync(System.Guid)">
+            <summary>
+            Блокировка пользователя.
+            </summary>
+            <param name="userUuid">УИД пользователя.</param>
+            <returns>Данные о заблокированном пользователе.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Admins.AdminsController.UnblockAsync(System.Guid)">
+            <summary>
+            Разблокировка пользователя.
+            </summary>
+            <param name="userUuid">УИД пользователя.</param>
+            <returns>Данные о разблокированном пользователе.</returns>
+        </member>
+        <member name="T:Freelance.Api.v1.Feedbacks.FeedbackCreateRequest">
+            <summary>
+            Запрос на создание отзыва.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackCreateRequest.Text">
+            <summary>
+            Текст.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackCreateRequest.UserRating">
+            <summary>
+            Оценка пользователя, к которому относится отзыв.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Feedbacks.FeedbackCreateResponse">
+            <summary>
+            Ответ на запрос создания отзыва.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackCreateResponse.UniqueIdentifier">
+            <summary>
+            Уникальный ИД.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackCreateResponse.UserId">
+            <summary>
+            ИД пользователя, к которому относится отзыв.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackCreateResponse.Text">
+            <summary>
+            Текст.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackCreateResponse.UserRating">
+            <summary>
+            Оценка пользователя, к которому относится отзыв.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackCreateResponse.IsDeleted">
+            <summary>
+            Запись удалена.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackCreateResponse.CreatedBy">
+            <summary>
+            Кем создана запись.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackCreateResponse.Created">
+            <summary>
+            Дата и время создания записи.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackCreateResponse.Updated">
+            <summary>
+            Дата и время обновления записи.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Feedbacks.FeedbackEditRequest">
+            <summary>
+            Запрос на изменение отзыва.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackEditRequest.Text">
+            <summary>
+            Текст.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackEditRequest.UserRating">
+            <summary>
+            Оценка пользователя, к которому относится отзыв.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Feedbacks.FeedbackEditResponse">
+            <summary>
+            Ответ на запрос изменения отзыва.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Feedbacks.FeedbackItem">
+            <summary>
+            Элемент отзыва.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackItem.UserFeedback">
+            <summary>
+            Пользователь, к которому относится отзыв.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackItem.Text">
+            <summary>
+            Текст.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackItem.UserRating">
+            <summary>
+            Оценка пользователя, к которому относится отзыв.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackItem.CreatedBy">
+            <summary>
+            Пользователь, которым создана запись.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackItem.Created">
+            <summary>
+            Дата и время создания записи.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackItem.Updated">
+            <summary>
+            Дата и время обновления записи.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Feedbacks.FeedbackListRequest">
+            <summary>
+            Запрос на список отзывов пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackListRequest.Limit">
+            <summary>
+            Количество записей.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackListRequest.Offset">
+            <summary>
+            Отступ от начала списка.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackListRequest.UserUniqueIdentifier">
+            <summary>
+            УИД пользователя, отзывы которого хотим получить.
+            Если пустой, получаем отзывы текущего пользователя.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Feedbacks.FeedbackListResponse">
+            <summary>
+            Ответ на запрос списка отзывов пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackListResponse.TotalCount">
+            <summary>
+            Общее количество элементов.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackListResponse.Items">
+            <summary>
+            Элементы ответа.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Feedbacks.FeedbacksController">
+            <summary>
+            Работа с отзывами пользователей.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.v1.Feedbacks.FeedbacksController.ListAsync(Freelance.Api.v1.Feedbacks.FeedbackListRequest)">
+            <summary>
+            Список отзывов.
+            </summary>
+            <param name="request">Данные запроса.</param>
+            <returns>Список отзывов.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Feedbacks.FeedbacksController.CreateAsync(System.Guid,Freelance.Api.v1.Feedbacks.FeedbackCreateRequest)">
+            <summary>
+            Создание отзыва.
+            </summary>
+            <param name="userUuid">УИД пользователя.</param>
+            <param name="request">Данные запроса.</param>
+            <returns>Сведения о созданном отзыве.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Feedbacks.FeedbacksController.EditAsync(System.Guid,Freelance.Api.v1.Feedbacks.FeedbackEditRequest)">
+            <summary>
+            Изменение отзыва.
+            </summary>
+            <param name="feedbackUuid">УИД отзыва.</param>
+            <param name="request">Данные запроса.</param>
+            <returns>Сведения об измененном отзыве.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Feedbacks.FeedbacksController.CalculateRatingSum(System.Int32)">
+            <summary>
+            Получение общего рейтинга пользователя.
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
         </member>
         <member name="T:Freelance.Api.v1.Files.FileInfoResponse">
             <summary>
@@ -343,6 +638,13 @@
             </summary>
             <param name="fileUuid">Уникальный ИД файла.</param>
         </member>
+        <member name="M:Freelance.Api.v1.Files.FilesController.DeleteAsync(System.Guid)">
+            <summary>
+            Удаление файла по его УИД.
+            </summary>
+            <param name="fileUuid">УИД файла.</param>
+            <returns></returns>
+        </member>
         <member name="M:Freelance.Api.v1.Files.FilesController.UploadAsync(Microsoft.AspNetCore.Http.IFormFile,Freelance.Core.Models.Storage.FileGroupType,System.String)">
             <summary>
             Загрузка файла.
@@ -350,7 +652,7 @@
             <param name="formFile">Файл для загрузки.</param>
             <param name="displayName">Описание файла.</param>
             <param name="fileGroup">Группа файлов.</param>
-            <returns>УИД загруженного файла.</returns>
+            <returns>ИД загруженного файла.</returns>
         </member>
         <member name="M:Freelance.Api.v1.Files.FilesController.DetailsAsync(System.Guid)">
             <summary>
@@ -358,6 +660,277 @@
             </summary>
             <param name="fileUuid">Уникальный ИД файла.</param>
             <returns></returns>
+        </member>
+        <member name="T:Freelance.Api.v1.ReferenceItems.FileReferenceItem">
+            <summary>
+            Элемент ссылки на файл.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.ReferenceItems.FileReferenceItem.UniqueIdentifier">
+            <summary>
+            УИД.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.ReferenceItems.FileReferenceItem.FileName">
+            <summary>
+            Имя файла.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.ReferenceItems.FileReferenceItem.DisplayName">
+            <summary>
+            Описание.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.ReferenceItems.FileReferenceItem.MimeType">
+            <summary>
+            MIME-тип.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.ReferenceItems.FileReferenceItem.Size">
+            <summary>
+            Размер файла.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.ReferenceItems.FileReferenceItem.GroupType">
+            <summary>
+            Группа файлов.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.ReferenceItems.FileReferenceItem.Url">
+            <summary>
+            Ссылка для скачивания.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.ReferenceItems.UserReferenceItem">
+            <summary>
+            Элемент ссылки на пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.ReferenceItems.UserReferenceItem.UniqueIdentifier">
+            <summary>
+            УИД.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.ReferenceItems.UserReferenceItem.UserName">
+            <summary>
+            Имя пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.ReferenceItems.UserReferenceItem.Role">
+            <summary>
+            Роль.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.ReferenceItems.UserReferenceItem.Rating">
+            <summary>
+            Рейтинг.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.ReferenceItems.UserReferenceItem.PhotoFile">
+            <summary>
+            Файл с фото профиля.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.UserBalances.UserBalanceOperationResponse">
+            <summary>
+            Ответ на запрос операции со счетом пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceOperationResponse.UserUniqueIdentifier">
+            <summary>
+            УИД пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceOperationResponse.BalanceBefore">
+            <summary>
+            Баланс до проведения операции.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceOperationResponse.BalanceAfter">
+            <summary>
+            Баланс после проведения операции.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceOperationResponse.OperationType">
+            <summary>
+            Тип операции.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.UserBalances.UserBalanceLogItem">
+            <summary>
+            Элемент операции со счетом пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceLogItem.UniqueIdentifier">
+            <summary>
+            Уникальный ИД.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceLogItem.BalanceBefore">
+            <summary>
+            Баланс до проведения операции.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceLogItem.BalanceAfter">
+            <summary>
+            Баланс после проведения операции.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceLogItem.Debit">
+            <summary>
+            Дебет (приход).
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceLogItem.Credit">
+            <summary>
+            Кредит (расход).
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceLogItem.Type">
+            <summary>
+            Тип операции.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceLogItem.Created">
+            <summary>
+            Дата и время создания записи.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.UserBalances.UserBalanceLogListRequest">
+            <summary>
+            Запрос на список операций со счетом пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceLogListRequest.Limit">
+            <summary>
+            Количество записей.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceLogListRequest.Offset">
+            <summary>
+            Отступ от начала списка.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceLogListRequest.Type">
+            <summary>
+            Тип операции.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.UserBalances.UserBalanceLogListResponse">
+            <summary>
+            Ответ на запрос списка операций со счетом пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceLogListResponse.TotalCount">
+            <summary>
+            Общее количество элементов.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceLogListResponse.Items">
+            <summary>
+            Элементы ответа.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.UserBalances.UserBalanceReplenishmentRequest">
+            <summary>
+            Запрос на пополнение счета пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceReplenishmentRequest.CardNumber">
+            <summary>
+            Номер карты.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceReplenishmentRequest.Cvc">
+            <summary>
+            CVC-код.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceReplenishmentRequest.AmountReplenishment">
+            <summary>
+            Сумма пополнения.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.UserBalances.UserBalancesController">
+            <summary>
+            Работа со счетами пользователей.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.v1.UserBalances.UserBalancesController.LogsListAsync(Freelance.Api.v1.UserBalances.UserBalanceLogListRequest)">
+            <summary>
+            Получение списка операций текущего пользователя (заказчика, исполнителя).
+            </summary>
+            <param name="request">Данные запроса.</param>
+            <returns>Список операций со счетом текущего пользователя.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.UserBalances.UserBalancesController.ReplenishmentAsync(Freelance.Api.v1.UserBalances.UserBalanceReplenishmentRequest)">
+            <summary>
+            Пополнение собственного счета (заказчика).
+            </summary>
+            <param name="request">Данные запроса.</param>
+            <returns>Информация о собственном счете (заказчика).</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.UserBalances.UserBalancesController.WithdrawalAsync(Freelance.Api.v1.UserBalances.UserBalanceWithdrawalRequest)">
+            <summary>
+            Вывод средств со собственного счета (заказчика, исполнителя).
+            </summary>
+            <param name="request">Данные запроса.</param>
+            <returns>Информация о собственном счете (заказачика, исполнителя).</returns>
+        </member>
+        <member name="T:Freelance.Api.v1.UserBalances.UserBalanceWithdrawalRequest">
+            <summary>
+            Запрос на вывод средств со счета пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceWithdrawalRequest.CardNumber">
+            <summary>
+            Номер карты.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.UserBalances.UserBalanceWithdrawalRequest.AmountWithdrawal">
+            <summary>
+            Сумма списания.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Users.UserEditRequest">
+            <summary>
+            Запрос на редактирование пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserEditRequest.UserName">
+            <summary>
+            Имя пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserEditRequest.Password">
+            <summary>
+            Пароль.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserEditRequest.FirstName">
+            <summary>
+            Имя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserEditRequest.LastName">
+            <summary>
+            Фамилия.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserEditRequest.MiddleName">
+            <summary>
+            Отчество.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserEditRequest.Email">
+            <summary>
+            Email-адрес.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserEditRequest.PhotoFileId">
+            <summary>
+            ИД файла с фото профиля.
+            </summary>
         </member>
         <member name="T:Freelance.Api.v1.Users.UserItem">
             <summary>
@@ -372,11 +945,6 @@
         <member name="P:Freelance.Api.v1.Users.UserItem.UserName">
             <summary>
             Имя пользователя.
-            </summary>
-        </member>
-        <member name="P:Freelance.Api.v1.Users.UserItem.Password">
-            <summary>
-            Пароль.
             </summary>
         </member>
         <member name="P:Freelance.Api.v1.Users.UserItem.FirstName">
@@ -409,9 +977,9 @@
             Рейтинг.
             </summary>
         </member>
-        <member name="P:Freelance.Api.v1.Users.UserItem.PhotoFileId">
+        <member name="P:Freelance.Api.v1.Users.UserItem.PhotoFile">
             <summary>
-            ИД файла с фото профиля.
+            Файл с фото профиля.
             </summary>
         </member>
         <member name="P:Freelance.Api.v1.Users.UserItem.IsBanned">
@@ -432,6 +1000,11 @@
         <member name="P:Freelance.Api.v1.Users.UserItem.Updated">
             <summary>
             Дата и время обновления записи.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserItem.AccessToken">
+            <summary>
+            Токен доступа.
             </summary>
         </member>
         <member name="T:Freelance.Api.v1.Users.UserListRequest">
@@ -534,44 +1107,44 @@
             Запрос на регистрацию пользователя.
             </summary>
         </member>
-        <member name="P:Freelance.Api.v1.Users.UserRegisterRequest.UserName">
-            <summary>
-            Имя пользователя.
-            </summary>
-        </member>
-        <member name="P:Freelance.Api.v1.Users.UserRegisterRequest.Password">
-            <summary>
-            Пароль.
-            </summary>
-        </member>
-        <member name="P:Freelance.Api.v1.Users.UserRegisterRequest.FirstName">
-            <summary>
-            Имя.
-            </summary>
-        </member>
-        <member name="P:Freelance.Api.v1.Users.UserRegisterRequest.MiddleName">
-            <summary>
-            Отчество.
-            </summary>
-        </member>
-        <member name="P:Freelance.Api.v1.Users.UserRegisterRequest.LastName">
-            <summary>
-            Фамилия.
-            </summary>
-        </member>
-        <member name="P:Freelance.Api.v1.Users.UserRegisterRequest.Email">
-            <summary>
-            Email-адрес.
-            </summary>
-        </member>
-        <member name="P:Freelance.Api.v1.Users.UserRegisterRequest.PhotoPhileId">
-            <summary>
-            ИД файла с фото профиля.
-            </summary>
-        </member>
         <member name="P:Freelance.Api.v1.Users.UserRegisterRequest.Role">
             <summary>
             Роль.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Users.UserRestorePasswordRequest">
+            <summary>
+            Запрос на восстановление пароля.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserRestorePasswordRequest.UserUniqueIdentifier">
+            <summary>
+            УИД пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserRestorePasswordRequest.Code">
+            <summary>
+            Код с почты.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserRestorePasswordRequest.NewPassword">
+            <summary>
+            Новый пароль.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Users.UserRestorePasswordResponse">
+            <summary>
+            Ответ на запрос для восстановления пароля.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserRestorePasswordResponse.UserUniqueIdentifier">
+            <summary>
+            УИД пользователя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Users.UserRestorePasswordResponse.IsSuccess">
+            <summary>
+            Успешное выполнение запроса.
             </summary>
         </member>
         <member name="T:Freelance.Api.v1.Users.UsersController">
@@ -600,33 +1173,32 @@
             <param name="request">Данные запроса.</param>
             <returns>Данные об авторизованном пользователе.</returns>
         </member>
-        <member name="M:Freelance.Api.v1.Users.UsersController.DetailsAsync(System.Guid)">
+        <member name="M:Freelance.Api.v1.Users.UsersController.Details(System.Guid)">
             <summary>
             Получение сведений о пользователе.
             </summary>
             <param name="userUuid">УИД пользователя.</param>
             <returns>Сведения о пользователе.</returns>
         </member>
-        <member name="M:Freelance.Api.v1.Users.UsersController.DeleteAsync(System.Guid)">
+        <member name="M:Freelance.Api.v1.Users.UsersController.EditAsync(Freelance.Api.v1.Users.UserEditRequest)">
             <summary>
-            Удаление пользователя.
+            Редактирование собственного профиля.
             </summary>
-            <param name="userUuid">УИД пользователя.</param>
-            <returns>Данные об удаленном пользователе.</returns>
+            <param name="request">Данные запроса.</param>
+            <returns>Сведения об измененном пользователе.</returns>
         </member>
-        <member name="M:Freelance.Api.v1.Users.UsersController.BlockAsync(System.Guid)">
+        <member name="M:Freelance.Api.v1.Users.UsersController.SendEmailRestoreCodeAsync(System.String)">
             <summary>
-            Блокировка пользователя.
+            Отправка кода восстановления для пароля на почту.
             </summary>
-            <param name="userUuid">УИД пользователя.</param>
-            <returns>Данные о заблокированном пользователе.</returns>
+            <param name="email">Почта.</param>
+            <returns>Результат отправки кода восстановления на почту.</returns>
         </member>
-        <member name="M:Freelance.Api.v1.Users.UsersController.GetUserInfo(Freelance.Core.Models.Storage.User)">
+        <member name="M:Freelance.Api.v1.Users.UsersController.RestorePasswordAsync(Freelance.Api.v1.Users.UserRestorePasswordRequest)">
             <summary>
-            Получение данных о пользователе.
+            Восстановление пароля.
             </summary>
-            <param name="user">Пользователь.</param>
-            <returns>Данные о пользователе.</returns>
+            <returns></returns>
         </member>
         <member name="M:Freelance.Api.v1.Users.UsersController.CreateUserBalanceAsync(System.Int32)">
             <summary>

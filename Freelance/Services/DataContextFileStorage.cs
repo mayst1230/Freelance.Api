@@ -83,7 +83,7 @@ public class DataContextFileStorage : IFileStorage
     /// <param name="displayName">Описание файла.</param>
     /// <param name="createdBy">Кем создан файл.</param>
     /// <returns>УИД загруженного файла.</returns>
-    public async Task<(int, Guid)> UploadAsync(MemoryStream data, string contentType, string fileName, FileGroupType fileGroup, string? displayName = default, int? createdBy = default)
+    public async Task<int> UploadAsync(MemoryStream data, string contentType, string fileName, FileGroupType fileGroup, string? displayName = default, int? createdBy = default)
     {
         var dbFile = new Core.Models.Storage.File()
         {
@@ -100,6 +100,6 @@ public class DataContextFileStorage : IFileStorage
         await _dataContext.Files.AddAsync(dbFile);
         await _dataContext.SaveChangesAsync();
 
-        return (dbFile.Id, dbFile.UniqueIdentifier);
+        return dbFile.Id;
     }
 }

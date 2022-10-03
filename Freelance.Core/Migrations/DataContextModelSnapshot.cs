@@ -19,7 +19,7 @@ namespace Freelance.Core.Migrations
             modelBuilder
                 .HasDefaultSchema("freelance")
                 .HasAnnotation("Npgsql:CollationDefinition:public.case_insensitive", "@colStrength=primary,@colStrength=primary,icu,False")
-                .HasAnnotation("ProductVersion", "6.0.4")
+                .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -64,6 +64,10 @@ namespace Freelance.Core.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("integer")
                         .HasColumnName("user_id");
+
+                    b.Property<decimal>("UserRating")
+                        .HasColumnType("numeric(2,1)")
+                        .HasColumnName("user_rating");
 
                     b.HasKey("Id")
                         .HasName("pk_feedbacks");
@@ -292,8 +296,12 @@ namespace Freelance.Core.Migrations
                         .HasColumnName("photo_file_id");
 
                     b.Property<decimal>("Rating")
-                        .HasColumnType("numeric(1,1)")
+                        .HasColumnType("numeric(2,1)")
                         .HasColumnName("rating");
+
+                    b.Property<string>("RestorePasswordCode")
+                        .HasColumnType("text")
+                        .HasColumnName("restore_password_code");
 
                     b.Property<int>("Role")
                         .HasColumnType("integer")
@@ -410,19 +418,23 @@ namespace Freelance.Core.Migrations
 
             modelBuilder.Entity("Freelance.Core.Models.Storage.Feedback", b =>
                 {
-                    b.HasOne("Freelance.Core.Models.Storage.User", null)
+                    b.HasOne("Freelance.Core.Models.Storage.User", "CreatedByUser")
                         .WithMany()
                         .HasForeignKey("CreatedBy")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_feedbacks_users_user_id1");
+                        .HasConstraintName("fk_feedbacks_users_created_by_user_id");
 
-                    b.HasOne("Freelance.Core.Models.Storage.User", null)
+                    b.HasOne("Freelance.Core.Models.Storage.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_feedbacks_users_user_id");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Freelance.Core.Models.Storage.File", b =>
@@ -464,11 +476,13 @@ namespace Freelance.Core.Migrations
 
             modelBuilder.Entity("Freelance.Core.Models.Storage.User", b =>
                 {
-                    b.HasOne("Freelance.Core.Models.Storage.File", null)
+                    b.HasOne("Freelance.Core.Models.Storage.File", "PhotoFile")
                         .WithMany()
                         .HasForeignKey("PhotoFileId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_users_files_file_id");
+                        .HasConstraintName("fk_users_files_photo_file_id");
+
+                    b.Navigation("PhotoFile");
                 });
 
             modelBuilder.Entity("Freelance.Core.Models.Storage.UserBalance", b =>
