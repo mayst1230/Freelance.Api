@@ -9,6 +9,11 @@ namespace Freelance.Core.Models.Storage;
 /// </summary>
 public class Feedback
 {
+    public Feedback()
+    {
+        UniqueIdentifier = Guid.NewGuid();
+    }
+
     /// <summary>
     /// ИД.
     /// </summary>

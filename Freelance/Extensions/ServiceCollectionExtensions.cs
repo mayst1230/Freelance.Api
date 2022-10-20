@@ -104,31 +104,30 @@ public static class ServiceCollectionExtensions
     /// <param name="services">Коллекция сервисов в контейнере DI.</param>
     private static void ConfigureApiBase(IServiceCollection services)
     {
-        services
-            .AddControllers(options =>
-            {
-                options.Filters.Add(new ProducesResponseTypeAttribute(StatusCodes.Status200OK));
-                options.Filters.Add(new ProducesResponseTypeAttribute(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest));
-                options.Filters.Add(new ApiErrorResponseFilter());
-                options.OutputFormatters.RemoveType<StringOutputFormatter>();
-            })
-            .AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-            });
+        services.AddControllers(options =>
+        {
+            options.Filters.Add(new ProducesResponseTypeAttribute(StatusCodes.Status200OK));
+            options.Filters.Add(new ProducesResponseTypeAttribute(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest));
+            options.Filters.Add(new ApiErrorResponseFilter());
+            options.OutputFormatters.RemoveType<StringOutputFormatter>();
+        })
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        });
+
         services.AddApiVersioning(config =>
         {
             config.ReportApiVersions = true;
             config.ApiVersionReader = new UrlSegmentApiVersionReader();
         });
 
-        services.AddVersionedApiExplorer(
-            options =>
-            {
-                options.GroupNameFormat = "'v'VVV";
-                options.SubstituteApiVersionInUrl = true;
-            });
+        services.AddVersionedApiExplorer(options =>
+        {
+            options.GroupNameFormat = "'v'VVV";
+            options.SubstituteApiVersionInUrl = true;
+        });
 
         services.Configure<ApiBehaviorOptions>(options =>
         {
@@ -146,19 +145,19 @@ public static class ServiceCollectionExtensions
     private static void ConfigureApiAuthorization(IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
+                .AddJwtBearer(options =>
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["Jwt:Issuer"],
-                    ValidAudience = configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
-                };
-            });
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = configuration["Jwt:Issuer"],
+                        ValidAudience = configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+                    };
+                });
 
         services.AddTransient<Interfaces.IJwtHandler, JwtHandlerService>();
     }

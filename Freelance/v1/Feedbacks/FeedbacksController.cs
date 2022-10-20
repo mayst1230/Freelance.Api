@@ -161,7 +161,7 @@ public class FeedbacksController : ControllerBase
     /// <param name="feedbackUuid">УИД отзыва.</param>
     /// <param name="request">Данные запроса.</param>
     /// <returns>Сведения об измененном отзыве.</returns>
-    [HttpPut("{uuid}")]
+    [HttpPut]
     public async Task<FeedbackEditResponse> EditAsync([FromQuery][Required] Guid feedbackUuid, [FromBody] FeedbackEditRequest request)
     {
         if (!ModelState.IsValid)
@@ -206,8 +206,8 @@ public class FeedbacksController : ControllerBase
     /// <summary>
     /// Получение общего рейтинга пользователя.
     /// </summary>
-    /// <param name="userId"></param>
-    /// <returns></returns>
+    /// <param name="userId">ИД пользователя.</param>
+    /// <returns>Общий рейтинг пользователя.</returns>
     private async Task<decimal> CalculateRatingSum(int userId)
     {
         var userRatingSum = await _dataContext.Feedbacks.Where(i => i.UserId == userId).Select(i => i.UserRating).SumAsync();

@@ -52,10 +52,8 @@ namespace Freelance.Core.Migrations
                         .HasColumnName("text");
 
                     b.Property<Guid>("UniqueIdentifier")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasColumnName("unique_identifier")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnName("unique_identifier");
 
                     b.Property<DateTimeOffset>("Updated")
                         .HasColumnType("timestamp with time zone")
@@ -137,10 +135,8 @@ namespace Freelance.Core.Migrations
                         .HasColumnName("size");
 
                     b.Property<Guid>("UniqueIdentifier")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasColumnName("unique_identifier")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnName("unique_identifier");
 
                     b.HasKey("Id")
                         .HasName("pk_files");
@@ -175,6 +171,10 @@ namespace Freelance.Core.Migrations
                     b.Property<int?>("ContractorId")
                         .HasColumnType("integer")
                         .HasColumnName("contractor_id");
+
+                    b.Property<DateTimeOffset>("Created")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created");
 
                     b.Property<int?>("CustomerFileId")
                         .HasColumnType("integer")
@@ -213,10 +213,12 @@ namespace Freelance.Core.Migrations
                         .HasColumnName("title");
 
                     b.Property<Guid>("UniqueIdentifier")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasColumnName("unique_identifier")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnName("unique_identifier");
+
+                    b.Property<DateTimeOffset>("Updated")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated");
 
                     b.HasKey("Id")
                         .HasName("pk_orders");
@@ -308,10 +310,8 @@ namespace Freelance.Core.Migrations
                         .HasColumnName("role");
 
                     b.Property<Guid>("UniqueIdentifier")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasColumnName("unique_identifier")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnName("unique_identifier");
 
                     b.Property<DateTimeOffset>("Updated")
                         .HasColumnType("timestamp with time zone")
@@ -394,10 +394,8 @@ namespace Freelance.Core.Migrations
                         .HasColumnName("type");
 
                     b.Property<Guid>("UniqueIdentifier")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
-                        .HasColumnName("unique_identifier")
-                        .HasDefaultValueSql("gen_random_uuid()");
+                        .HasColumnName("unique_identifier");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer")
@@ -454,11 +452,11 @@ namespace Freelance.Core.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("fk_orders_files_file_id");
 
-                    b.HasOne("Freelance.Core.Models.Storage.User", null)
+                    b.HasOne("Freelance.Core.Models.Storage.User", "Contractor")
                         .WithMany()
                         .HasForeignKey("ContractorId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .HasConstraintName("fk_orders_users_user_id");
+                        .HasConstraintName("fk_orders_users_contractor_id");
 
                     b.HasOne("Freelance.Core.Models.Storage.File", null)
                         .WithMany()
@@ -466,12 +464,16 @@ namespace Freelance.Core.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .HasConstraintName("fk_orders_files_file_id1");
 
-                    b.HasOne("Freelance.Core.Models.Storage.User", null)
+                    b.HasOne("Freelance.Core.Models.Storage.User", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_orders_users_user_id1");
+                        .HasConstraintName("fk_orders_users_customer_id");
+
+                    b.Navigation("Contractor");
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Freelance.Core.Models.Storage.User", b =>

@@ -28,11 +28,13 @@ public class FileReferenceItem
     /// <summary>
     /// MIME-тип.
     /// </summary>
+    [Required]
     public string MimeType { get; set; } = string.Empty;
 
     /// <summary>
     /// Размер файла.
     /// </summary>
+    [Required]
     public long Size { get; set; }
 
     /// <summary>

@@ -24,10 +24,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Freelance.Core\Freelance.Core.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="v1\Orders\" />
-  </ItemGroup>
   
   <PropertyGroup>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

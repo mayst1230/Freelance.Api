@@ -125,7 +125,6 @@ public class UserBalancesController : ControllerBase
         }
         catch
         {
-            await tr.RollbackAsync();
             throw new ApiException("Ошибка при пополнении счета пользователя.");
         }
     }
@@ -192,7 +191,6 @@ public class UserBalancesController : ControllerBase
         }
         catch
         {
-            await tr.RollbackAsync();
             throw new ApiException("Ошибка при выводе средств со счета пользователя.");
         }
     }

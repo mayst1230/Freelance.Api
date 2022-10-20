@@ -1,5 +1,6 @@
 ﻿using Freelance.Api.Exceptions;
 using Freelance.Api.Interfaces;
+using Freelance.Core.Models.Storage;
 using System.Net;
 using System.Net.Mail;
 
@@ -15,6 +16,42 @@ public class EmailSenderService : IEmailSender
     public EmailSenderService(IConfiguration configuration)
     {
         _configuration = configuration;
+    }
+
+    /// <summary>
+    /// Отправка сообщения об измении статуса заказа на почту.
+    /// </summary>
+    /// <param name="email">Почта.</param>
+    /// <param name="order">Данные заказа.</param>
+    /// <returns>Сообщение отправлено.</returns>
+    public bool SendEmailStatusOrder(string email, Order order)
+    {
+        try
+        {
+            var message = new MailMessage(_configuration["Email:Sender:From"], email)
+            {
+                Subject = "Изменение статуса заказа",
+                Body = $"<h2>Заказ: '${order.Title}' был переведен в статус ${order.Status}. Проверьте заказ в личном кабинете для получения подробной информации.</h2>",
+                IsBodyHtml = true,
+            };
+
+            var smtpIsParse = int.TryParse(_configuration["Email:Smtp:Port"], out var smtpPort);
+            if (!smtpIsParse)
+                throw new ApiException("Ошибка при получении SMTP-порта");
+
+            var smtpClient = new SmtpClient(_configuration["Email:Smtp:Address"], smtpPort)
+            {
+                Credentials = new NetworkCredential(_configuration["Email:Credentials:Login"], _configuration["Email:Credentials:Password"]),
+                EnableSsl = true,
+            };
+
+            smtpClient.Send(message);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     /// <summary>
@@ -34,18 +71,17 @@ public class EmailSenderService : IEmailSender
                 IsBodyHtml = true,
             };
 
-            var isParse = int.TryParse(_configuration["Email:Smtp:Port"], out var result);
-            if (!isParse)
+            var smtpIsParse = int.TryParse(_configuration["Email:Smtp:Port"], out var smtpPort);
+            if (!smtpIsParse)
                 throw new ApiException("Ошибка при получении SMTP-порта");
 
-            var smtpClient = new SmtpClient(_configuration["Email:Smtp:Address"], result)
+            var smtpClient = new SmtpClient(_configuration["Email:Smtp:Address"], smtpPort)
             {
-                Credentials = new NetworkCredential(_configuration["Email:Credentials:Email"], _configuration["Email:Credentials:Password"]),
+                Credentials = new NetworkCredential(_configuration["Email:Credentials:Login"], _configuration["Email:Credentials:Password"]),
                 EnableSsl = true,
             };
 
             smtpClient.Send(message);
-
             return true;
         }
         catch

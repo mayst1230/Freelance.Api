@@ -45,7 +45,7 @@ public class UsersController : ControllerBase
         if (!ModelState.IsValid)
             throw new ApiException();
 
-        var list = _dataContext.Users.Where(i => !i.IsBanned && !i.IsDeleted).Select(i => new UserItem()
+        var list = _dataContext.Users.Select(i => new UserItem()
         {
             UniqueIdentifier = i.UniqueIdentifier,
             UserName = i.UserName,
@@ -117,12 +117,12 @@ public class UsersController : ControllerBase
     /// <returns>Данные о зарегистрированном пользователе.</returns>
     [HttpPost("register")]
     [AllowAnonymous]
-    public async Task<UserItem> RegisterAsync([FromQuery] UserRegisterRequest request)
+    public async Task<UserItem> RegisterAsync(UserRegisterRequest request)
     {
         if (!ModelState.IsValid)
             throw new ApiException();
 
-        if (await _dataContext.Users.AnyAsync(i => !i.IsDeleted && i.IsBanned && (i.UserName == request.UserName || i.Email == request.Email)))
+        if (await _dataContext.Users.AnyAsync(i => !i.IsDeleted && !i.IsBanned && (i.UserName == request.UserName || i.Email == request.Email)))
             throw new ApiException("Пользователь уже существует.");
 
         using var tr = await _dataContext.Database.BeginTransactionAsync();
@@ -145,13 +145,13 @@ public class UsersController : ControllerBase
         await _dataContext.Users.AddAsync(user);
         await _dataContext.SaveChangesAsync();
 
-        await tr.CommitAsync();
-
         if (!await CreateUserBalanceAsync(user.Id))
         {
             await tr.RollbackAsync();
             throw new ApiException("Ошибка при создании счёта пользователя.");
-        }    
+        }
+
+        await tr.CommitAsync();
 
         return _userService.GetUserInfo(user, true);
     }
@@ -180,29 +180,20 @@ public class UsersController : ControllerBase
     /// <summary>
     /// Получение сведений о пользователе.
     /// </summary>
-    /// <param name="userUuid">УИД пользователя.</param>
+    /// <param name="uuid">УИД пользователя.</param>
     /// <returns>Сведения о пользователе.</returns>
-    [HttpGet("info")]
+    [HttpGet("{uuid}")]
     [Authorize]
-    public UserItem Details([FromQuery][Required] Guid userUuid)
+    public async Task<UserItem> Details([FromRoute][Required] Guid uuid)
     {
         if (!ModelState.IsValid)
             throw new ApiException();
 
-        var item = (
-            from u in _dataContext.Users
-            join f in _dataContext.Files on u.PhotoFileId equals f.Id into fG
-            from f in fG.DefaultIfEmpty()
-            where !u.IsBanned && !u.IsDeleted && u.UniqueIdentifier == userUuid
-            select new
-            {
-                User = u,
-                File = f,
-            }
-        ).FirstOrDefault() ?? throw new ApiNotFoundException("Пользователь не найден.");
+        var user = await _dataContext.Users.Where(i => i.UniqueIdentifier == uuid)
+                                           .Include(i => i.PhotoFile)
+                                           .FirstOrDefaultAsync() ?? throw new ApiNotFoundException("Пользователь не найден.");
 
-        item.User.PhotoFile = item.File;
-        return _userService.GetUserInfo(item.User);
+        return _userService.GetUserInfo(user);
     }
 
 
@@ -213,38 +204,29 @@ public class UsersController : ControllerBase
     /// <returns>Сведения об измененном пользователе.</returns>
     [HttpPut("me/edit")]
     [Authorize]
-    public async Task<UserItem> EditAsync([FromBody] UserEditRequest request)
+    public async Task<UserItem> EditAsync(UserEditRequest request)
     {
         if (!ModelState.IsValid)
             throw new ApiException();
 
         var userUuid = User.GetUserUuid() ?? throw new InvalidOperationException();
 
-        var item = (
-            from u in _dataContext.Users
-            join f in _dataContext.Files on u.PhotoFileId equals f.Id into fG
-            from f in fG.DefaultIfEmpty()
-            where  !u.IsBanned && !u.IsDeleted && u.UniqueIdentifier == userUuid
-            select new 
-            { 
-                User = u,
-                File = f,
-            }
-        ).FirstOrDefault() ?? throw new ApiNotFoundException("Пользователь не найден.");
+        var user = await _dataContext.Users.Where(i => i.UniqueIdentifier == userUuid)
+                                           .Include(i => i.PhotoFile)
+                                           .FirstOrDefaultAsync() ?? throw new ApiNotFoundException("Пользователь не найден.");
 
-        item.User.UserName = request.UserName;
-        item.User.FirstName = request.FirstName;
-        item.User.LastName = request.LastName;
-        item.User.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
-        item.User.MiddleName = request.MiddleName;
-        item.User.Email = request.Email;
-        item.User.PhotoFileId = request.PhotoFileId;
-        item.User.Updated = DateTimeOffset.UtcNow;
+        user.UserName = request.UserName;
+        user.FirstName = request.FirstName;
+        user.LastName = request.LastName;
+        user.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+        user.MiddleName = request.MiddleName;
+        user.Email = request.Email;
+        user.PhotoFileId = request.PhotoFileId;
+        user.Updated = DateTimeOffset.UtcNow;
 
         await _dataContext.SaveChangesAsync();
 
-        item.User.PhotoFile = item.File;
-        return _userService.GetUserInfo(item.User);
+        return _userService.GetUserInfo(user);
     }
 
     /// <summary>
@@ -262,7 +244,7 @@ public class UsersController : ControllerBase
         var user = await _dataContext.Users.Where(i => !i.IsDeleted && !i.IsBanned && i.Email == email).FirstOrDefaultAsync()
             ?? throw new ApiNotFoundException("Пользователь не найден.");
 
-        var restoreCode = new Random().Next(100000, 999999).ToString() 
+        var restoreCode = new Random().Next(100000, 999999).ToString()
             ?? throw new ApiException("Ошибка при генерации кода восстановления.");
 
         user.RestorePasswordCode = BCrypt.Net.BCrypt.HashPassword(restoreCode);
@@ -272,8 +254,8 @@ public class UsersController : ControllerBase
 
         var sendEmailResult = _emailSender.SendEmailRestorePasswordCode(email, restoreCode);
 
-        return new UserRestorePasswordResponse() 
-        { 
+        return new UserRestorePasswordResponse()
+        {
             UserUniqueIdentifier = user.UniqueIdentifier,
             IsSuccess = sendEmailResult,
         };
@@ -302,8 +284,8 @@ public class UsersController : ControllerBase
 
         await _dataContext.SaveChangesAsync();
 
-        return new UserRestorePasswordResponse() 
-        { 
+        return new UserRestorePasswordResponse()
+        {
             UserUniqueIdentifier = user.UniqueIdentifier,
             IsSuccess = true,
         };

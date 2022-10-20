@@ -24,8 +24,7 @@ public class UserReferenceItem
     /// <summary>
     /// Роль.
     /// </summary>
-    [Required]
-    public UserRole Role { get; set; }
+    public UserRole? Role { get; set; }
 
     /// <summary>
     /// Рейтинг.

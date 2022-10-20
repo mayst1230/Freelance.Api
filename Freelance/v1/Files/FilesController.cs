@@ -16,6 +16,7 @@ namespace Freelance.Api.v1.Files
     [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
+    [AllowAnonymous]
     public class FilesController : ControllerBase
     {
         private readonly DataContext _dataContext;
@@ -54,7 +55,6 @@ namespace Freelance.Api.v1.Files
         /// <param name="fileUuid">УИД файла.</param>
         /// <returns></returns>
         [HttpDelete("{fileUuid}")]
-        [Authorize]
         public async Task DeleteAsync([FromRoute] Guid fileUuid)
         {
             var file = await _dataContext.Files.Where(i => i.UniqueIdentifier == fileUuid).FirstOrDefaultAsync() 

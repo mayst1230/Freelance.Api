@@ -8,6 +8,11 @@ namespace Freelance.Core.Models.Storage;
 /// </summary>
 public class Order
 {
+    public Order()
+    {
+        UniqueIdentifier = Guid.NewGuid();
+    }
+
     /// <summary>
     /// ИД.
     /// </summary>
@@ -86,6 +91,28 @@ public class Order
     /// </summary>
     [Required]
     public bool IsDeleted { get; set; }
+
+    /// <summary>
+    /// Дата и время создания записи.
+    /// </summary>
+    [Required]
+    public DateTimeOffset Created { get; set; }
+
+    /// <summary>
+    /// Дата и время обновления записи.
+    /// </summary>
+    [Required]
+    public DateTimeOffset Updated { get; set; }
+
+    /// <summary>
+    /// Заказчик.
+    /// </summary>
+    public virtual User Customer { get; set; } = null!;
+
+    /// <summary>
+    /// Исполнитель.
+    /// </summary>
+    public virtual User? Contractor { get; set; }
 }
 
 /// <summary>

@@ -181,6 +181,14 @@
             <param name="code">Код для восстановления.</param>
             <returns>Сообщение отправлено.</returns>
         </member>
+        <member name="M:Freelance.Api.Interfaces.IEmailSender.SendEmailStatusOrder(System.String,Freelance.Core.Models.Storage.Order)">
+            <summary>
+            Отправка сообщения об измении статуса заказа на почту.
+            </summary>
+            <param name="email">Почта.</param>
+            <param name="order">Данные заказа.</param>
+            <returns>Сообщение отправлено.</returns>
+        </member>
         <member name="T:Freelance.Api.Interfaces.IFileStorage">
             <summary>
             Хранилище файлов.
@@ -312,6 +320,14 @@
             Служба для рассылки писем.
             </summary>
         </member>
+        <member name="M:Freelance.Api.Services.EmailSenderService.SendEmailStatusOrder(System.String,Freelance.Core.Models.Storage.Order)">
+            <summary>
+            Отправка сообщения об измении статуса заказа на почту.
+            </summary>
+            <param name="email">Почта.</param>
+            <param name="order">Данные заказа.</param>
+            <returns>Сообщение отправлено.</returns>
+        </member>
         <member name="M:Freelance.Api.Services.EmailSenderService.SendEmailRestorePasswordCode(System.String,System.String)">
             <summary>
             Отправка сообщения на почту для восстановления пароля.
@@ -377,6 +393,12 @@
             <summary>
             Работа с администраторами.
             </summary>
+        </member>
+        <member name="M:Freelance.Api.v1.Admins.AdminsController.GetFakeAccessToken">
+            <summary>
+            Получение фейкового токена доступа для тестирования системы.
+            </summary>
+            <returns>Фейковый токен доступа.</returns>
         </member>
         <member name="M:Freelance.Api.v1.Admins.AdminsController.DeleteAsync(System.Guid)">
             <summary>
@@ -589,8 +611,8 @@
             <summary>
             Получение общего рейтинга пользователя.
             </summary>
-            <param name="userId"></param>
-            <returns></returns>
+            <param name="userId">ИД пользователя.</param>
+            <returns>Общий рейтинг пользователя.</returns>
         </member>
         <member name="T:Freelance.Api.v1.Files.FileInfoResponse">
             <summary>
@@ -660,6 +682,248 @@
             </summary>
             <param name="fileUuid">Уникальный ИД файла.</param>
             <returns></returns>
+        </member>
+        <member name="T:Freelance.Api.v1.Orders.OrderChangeStatusRequest">
+            <summary>
+            Запрос на изменение статуса заказа услуги.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderChangeStatusRequest.UniqueIdentifier">
+            <summary>
+            УИД заказа услуги.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderChangeStatusRequest.Status">
+            <summary>
+            Статус заказа услуги.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Orders.OrderCreateRequest">
+            <summary>
+            Запрос на создание заказа услуги.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderCreateRequest.Title">
+            <summary>
+            Заголовок.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderCreateRequest.Description">
+            <summary>
+            Описание.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderCreateRequest.CustomerFileId">
+            <summary>
+            ИД файла заказчика.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderCreateRequest.Price">
+            <summary>
+            Стоимость.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderCreateRequest.Started">
+            <summary>
+            Дата и время начала действия заказа.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderCreateRequest.Canceled">
+            <summary>
+            Дата и время окончания действия заказа.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Orders.OrderEditRequest">
+            <summary>
+            Запрос на изменение заказа услуги.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderEditRequest.ContractorFileId">
+            <summary>
+            ИД файла исполнителя.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Orders.OrderItem">
+            <summary>
+            Заказ услуги.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderItem.UniqueIdentifier">
+            <summary>
+            Уникальный ИД.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderItem.Customer">
+            <summary>
+            ИД заказчика.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderItem.Contractor">
+            <summary>
+            ИД исполнителя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderItem.Title">
+            <summary>
+            Заголовок.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderItem.Description">
+            <summary>
+            Описание.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderItem.Status">
+            <summary>
+            Статус.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderItem.CustomerFile">
+            <summary>
+            Файл заказчика.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderItem.ContractorFile">
+            <summary>
+            Файл исполнителя.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderItem.Price">
+            <summary>
+            Стоимость.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderItem.Started">
+            <summary>
+            Дата и время начала действия заказа.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderItem.Canceled">
+            <summary>
+            Дата и время окончания действия заказа.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderItem.IsDeleted">
+            <summary>
+            Запись удалена.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderItem.Created">
+            <summary>
+            Дата и время создания записи.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderItem.Updated">
+            <summary>
+            Дата и время обновления записи.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Orders.OrderListExecutionRequest">
+            <summary>
+            Запрос на список заказов услуг в статусе "На исполнение".
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderListExecutionRequest.Limit">
+            <summary>
+            Количество записей.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderListExecutionRequest.Offset">
+            <summary>
+            Отступ от начала списка.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Orders.OrderListResponse">
+            <summary>
+            Ответ на запрос списка заказов услуг.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderListResponse.TotalCount">
+            <summary>
+            Общее количество элементов.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderListResponse.Items">
+            <summary>
+            Элементы ответа.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Orders.OrderMeListRequest">
+            <summary>
+            Запрос на получение списка собственных заказов услуг.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderMeListRequest.Status">
+            <summary>
+            Статус заказа услуги.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Orders.OrderMeListRequest.IsDeleted">
+            <summary>
+            Запись удалена.
+            </summary>
+        </member>
+        <member name="T:Freelance.Api.v1.Orders.OrdersController">
+            <summary>
+            Работа с заказами.
+            </summary>
+        </member>
+        <member name="M:Freelance.Api.v1.Orders.OrdersController.ExecutionListAsync(Freelance.Api.v1.Orders.OrderListExecutionRequest)">
+            <summary>
+            Получение списка заказов услуг на исполнение (исполнитель).
+            </summary>
+            <param name="request">Данные запроса.</param>
+            <returns>Список заказов услуг на исполнение.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Orders.OrdersController.MeListAsync(Freelance.Api.v1.Orders.OrderMeListRequest)">
+            <summary>
+            Получение списка собственных заказов услуг.
+            </summary>
+            <param name="request">Данные запроса.</param>
+            <returns>Список собственных заказов услуг.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Orders.OrdersController.DetailsAsync(System.Guid)">
+            <summary>
+            Получение сведений о заказе услуги.
+            </summary>
+            <param name="orderUuid">УИД заказа.</param>
+            <returns>Сведения о заказе услуги.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Orders.OrdersController.CreateAsync(Freelance.Api.v1.Orders.OrderCreateRequest)">
+            <summary>
+            Создание заказа услуги.
+            </summary>
+            <param name="request">Данные запроса.</param>
+            <returns>Сведения о созданном заказе.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Orders.OrdersController.EditAsync(System.Guid,Freelance.Api.v1.Orders.OrderEditRequest)">
+            <summary>
+            Редактирование заказа услуги.
+            </summary>
+            <param name="orderUuid">УИД заказа услуги</param>
+            <param name="request">Данные запроса.</param>
+            <returns>Сведения о измененном заказе услуги.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Orders.OrdersController.ChangeStatusAsync(Freelance.Api.v1.Orders.OrderChangeStatusRequest)">
+            <summary>
+            Изменение статуса заказа услуги.
+            </summary>
+            <param name="request">Данные запроса.</param>
+            <returns>Сведения о заказе услуги.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Orders.OrdersController.ActionsAsync(System.Guid)">
+            <summary>
+            Список доступых действий над заказом услуги.
+            </summary>
+            <param name="orderUuid">УИД заказа услуги.</param>
+            <returns>Список доступых действий над заказом услуги.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Orders.OrdersController.GetDbItemAsync(Freelance.Core.Models.Storage.Order)">
+            <summary>
+            Сведения о заказе услуги.
+            </summary>
+            <param name="order">Заказ услуги.</param>
+            <returns>Сведения о заказе услуги.</returns>
         </member>
         <member name="T:Freelance.Api.v1.ReferenceItems.FileReferenceItem">
             <summary>
@@ -1177,7 +1441,7 @@
             <summary>
             Получение сведений о пользователе.
             </summary>
-            <param name="userUuid">УИД пользователя.</param>
+            <param name="uuid">УИД пользователя.</param>
             <returns>Сведения о пользователе.</returns>
         </member>
         <member name="M:Freelance.Api.v1.Users.UsersController.EditAsync(Freelance.Api.v1.Users.UserEditRequest)">

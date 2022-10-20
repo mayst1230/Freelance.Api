@@ -53,7 +53,6 @@ public class DataContext : DbContext
     {
         optionsBuilder.UseSnakeCaseNamingConvention();
         optionsBuilder.ReplaceService<IHistoryRepository, CamelCaseHistoryContext>();
-        optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DB"));
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -63,24 +62,21 @@ public class DataContext : DbContext
 
         modelBuilder.Entity<User>(e =>
         {
-            e.Property(i => i.UniqueIdentifier).HasDefaultValueSql("gen_random_uuid()");
             e.HasIndex(i => new { i.UniqueIdentifier }).IsUnique().HasDatabaseName("ix_uq_user");
             e.HasOne(i => i.PhotoFile).WithMany().HasForeignKey(i => i.PhotoFileId).OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<Storage.File>(e =>
         {
-            e.Property(i => i.UniqueIdentifier).HasDefaultValueSql("gen_random_uuid()");
             e.HasIndex(i => i.UniqueIdentifier).IsUnique().HasDatabaseName("ix_uq_file");
             e.HasOne<User>().WithMany().HasForeignKey(i => i.CreatedBy).OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<Order>(e =>
         {
-            e.Property(i => i.UniqueIdentifier).HasDefaultValueSql("gen_random_uuid()");
             e.HasIndex(i => i.UniqueIdentifier).IsUnique().HasDatabaseName("ix_uq_order");
-            e.HasOne<User>().WithMany().HasForeignKey(i => i.ContractorId).OnDelete(DeleteBehavior.Restrict);
-            e.HasOne<User>().WithMany().HasForeignKey(i => i.CustomerId).OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(i => i.Contractor).WithMany().HasForeignKey(i => i.ContractorId).OnDelete(DeleteBehavior.Restrict);
+            e.HasOne(i => i.Customer).WithMany().HasForeignKey(i => i.CustomerId).OnDelete(DeleteBehavior.Restrict);
             e.HasOne<Storage.File>().WithMany().HasForeignKey(i => i.ContractorFileId).OnDelete(DeleteBehavior.Restrict);
             e.HasOne<Storage.File>().WithMany().HasForeignKey(i => i.CustomerFileId).OnDelete(DeleteBehavior.Restrict);
         });
@@ -92,14 +88,12 @@ public class DataContext : DbContext
 
         modelBuilder.Entity<UserBalanceLog>(e =>
         {
-            e.Property(i => i.UniqueIdentifier).HasDefaultValueSql("gen_random_uuid()");
             e.HasIndex(i => i.UniqueIdentifier).IsUnique().HasDatabaseName("ix_uq_user_balance_log");
             e.HasOne<UserBalance>().WithMany().HasForeignKey(i => i.UserId).OnDelete(DeleteBehavior.Restrict);
         });
 
         modelBuilder.Entity<Feedback>(e =>
         {
-            e.Property(i => i.UniqueIdentifier).HasDefaultValueSql("gen_random_uuid()");
             e.HasIndex(i => i.UniqueIdentifier).IsUnique().HasDatabaseName("ix_uq_feedback");
             e.HasOne(i => i.User).WithMany().HasForeignKey(i => i.UserId).OnDelete(DeleteBehavior.Restrict);
             e.HasOne(i => i.CreatedByUser).WithMany().HasForeignKey(i => i.CreatedBy).OnDelete(DeleteBehavior.Restrict);

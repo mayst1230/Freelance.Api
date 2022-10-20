@@ -2,6 +2,7 @@
 using Freelance.Api.Interfaces;
 using Freelance.Api.v1.Users;
 using Freelance.Core.Models;
+using Freelance.Core.Models.Storage;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,18 +16,37 @@ namespace Freelance.Api.v1.Admins
     [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
-    [Authorize(Roles = "Admin")]
     public class AdminsController : ControllerBase
     {
         private readonly DataContext _dataContext;
         private readonly IUserService _userService;
+        private readonly IJwtHandler _jwtHandler;
 
         public AdminsController(
             DataContext dataContext,
-            IUserService userService)
+            IUserService userService,
+            IJwtHandler jwtHandler)
         {
             _dataContext = dataContext;
             _userService = userService;
+            _jwtHandler = jwtHandler;
+        }
+
+        /// <summary>
+        /// Получение фейкового токена доступа для тестирования системы.
+        /// </summary>
+        /// <returns>Фейковый токен доступа.</returns>
+        [HttpGet("tokens/fake")]
+        public string GetFakeAccessToken()
+        {
+            return _jwtHandler.GenerateToken(new User()
+            {
+                Id = -1,
+                UniqueIdentifier = Guid.NewGuid(),
+                UserName = "fakeUser",
+                Email = "fakeUserEmail",
+                Role = UserRole.Admin,
+            });
         }
 
         /// <summary>
@@ -34,22 +54,19 @@ namespace Freelance.Api.v1.Admins
         /// </summary>
         /// <param name="userUuid">УИД пользователя.</param>
         /// <returns>Данные об удаленном пользователе.</returns>
+        [Authorize(Roles = "Admin")]
         [HttpDelete("users/delete")]
         public async Task<UserItem> DeleteAsync([FromQuery][Required] Guid userUuid)
         {
             if (!ModelState.IsValid)
                 throw new ApiException();
 
-            var user = await _dataContext.Users.Where(i => i.UniqueIdentifier == userUuid)
+            var user = await _dataContext.Users.Where(i => !i.IsDeleted && i.UniqueIdentifier == userUuid)
                                                .FirstOrDefaultAsync() ?? throw new ApiNotFoundException("Пользователь не найден.");
-
-            if (user.IsDeleted)
-                throw new ApiException("Пользователь уже удален.");
 
             user.IsDeleted = true;
             user.Updated = DateTimeOffset.UtcNow;
 
-            await _dataContext.Users.AddAsync(user);
             await _dataContext.SaveChangesAsync();
 
             return _userService.GetUserInfo(user);
@@ -60,22 +77,19 @@ namespace Freelance.Api.v1.Admins
         /// </summary>
         /// <param name="userUuid">УИД пользователя.</param>
         /// <returns>Данные об восстановленном пользователе.</returns>
+        [Authorize(Roles = "Admin")]
         [HttpPut("users/restore")]
         public async Task<UserItem> RestoreAsync([FromQuery][Required] Guid userUuid)
         {
             if (!ModelState.IsValid)
                 throw new ApiException();
 
-            var user = await _dataContext.Users.Where(i => i.UniqueIdentifier == userUuid)
+            var user = await _dataContext.Users.Where(i => i.IsDeleted && i.UniqueIdentifier == userUuid)
                                                .FirstOrDefaultAsync() ?? throw new ApiNotFoundException("Пользователь не найден.");
-
-            if (!user.IsDeleted)
-                throw new ApiException("Пользователь не удален.");
 
             user.IsDeleted = false;
             user.Updated = DateTimeOffset.UtcNow;
 
-            await _dataContext.Users.AddAsync(user);
             await _dataContext.SaveChangesAsync();
 
             return _userService.GetUserInfo(user);
@@ -86,22 +100,19 @@ namespace Freelance.Api.v1.Admins
         /// </summary>
         /// <param name="userUuid">УИД пользователя.</param>
         /// <returns>Данные о заблокированном пользователе.</returns>
+        [Authorize(Roles = "Admin")]
         [HttpPut("users/block")]
         public async Task<UserItem> BlockAsync([FromQuery][Required] Guid userUuid)
         {
             if (!ModelState.IsValid)
                 throw new ApiException();
 
-            var user = await _dataContext.Users.Where(i => i.UniqueIdentifier == userUuid)
+            var user = await _dataContext.Users.Where(i => !i.IsBanned && i.UniqueIdentifier == userUuid)
                                                .FirstOrDefaultAsync() ?? throw new ApiNotFoundException("Пользователь не найден.");
-
-            if (user.IsBanned)
-                throw new ApiException("Пользователь уже заблокирован.");
 
             user.IsBanned = true;
             user.Updated = DateTimeOffset.UtcNow;
 
-            await _dataContext.Users.AddAsync(user);
             await _dataContext.SaveChangesAsync();
 
             return _userService.GetUserInfo(user);
@@ -112,22 +123,19 @@ namespace Freelance.Api.v1.Admins
         /// </summary>
         /// <param name="userUuid">УИД пользователя.</param>
         /// <returns>Данные о разблокированном пользователе.</returns>
+        [Authorize(Roles = "Admin")]
         [HttpPut("users/unblock")]
         public async Task<UserItem> UnblockAsync([FromQuery][Required] Guid userUuid)
         {
             if (!ModelState.IsValid)
                 throw new ApiException();
 
-            var user = await _dataContext.Users.Where(i => i.UniqueIdentifier == userUuid)
+            var user = await _dataContext.Users.Where(i => i.IsBanned && i.UniqueIdentifier == userUuid)
                                                .FirstOrDefaultAsync() ?? throw new ApiNotFoundException("Пользователь не найден.");
-
-            if (!user.IsBanned)
-                throw new ApiException("Пользователь не заблокирован.");
 
             user.IsBanned = false;
             user.Updated = DateTimeOffset.UtcNow;
 
-            await _dataContext.Users.AddAsync(user);
             await _dataContext.SaveChangesAsync();
 
             return _userService.GetUserInfo(user);

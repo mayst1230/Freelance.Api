@@ -10,5 +10,7 @@ builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
 app.Configure(builder.Configuration);
-app.MapGet("/", () => "Hi! Add /swagger in your URL adress for use Swagger");
 app.Run();
+
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1050:Declare types in namespaces", Justification = "<Pending>")]
+public partial class Program { }

@@ -8,6 +8,11 @@ namespace Freelance.Core.Models.Storage;
 /// </summary>
 public class User
 {
+    public User()
+    {
+        UniqueIdentifier = Guid.NewGuid();
+    }
+
     /// <summary>
     /// ИД.
     /// </summary>
