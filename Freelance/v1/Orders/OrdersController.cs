@@ -215,12 +215,6 @@ public class OrdersController : ControllerBase
         var order = await _dataContext.Orders.Where(i => i.IsDeleted && i.UniqueIdentifier == orderUuid).FirstOrDefaultAsync()
             ?? throw new ApiNotFoundException("Заказ услуги не найден.");
 
-        if (order.CustomerId != User.GetUserId())
-            throw new ApiForbidException("Изменять можно только собственные заказы услуг.");
-
-        if (order.Status != OrderStatus.Execution)
-            throw new ApiException("Изменить можно только заказ услуги, находящийся в статусе 'На исполнение'");
-
         if (order.CustomerId == User.GetUserId() && request.CustomerFileId.HasValue)
             order.CustomerFileId = request.CustomerFileId.Value;
 
