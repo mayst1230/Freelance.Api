@@ -119,3 +119,4 @@ D:\GIT\Freelance.Api\Freelance\obj\Debug\net6.0\ref\Freelance.Api.dll
 D:\GIT\Freelance.Api\Freelance\obj\Debug\net6.0\Freelance.Api.xml
 D:\GIT\Freelance.Api\Freelance\obj\Debug\net6.0\Freelance.Api.pdb
 D:\GIT\Freelance.Api\Freelance\obj\Debug\net6.0\Freelance.Api.genruntimeconfig.cache
+D:\GIT\Freelance.Api\Freelance\bin\Debug\net6.0\appsettings.Development.json

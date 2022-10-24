@@ -42,7 +42,7 @@ namespace Freelance.Api.v1.Admins
             return _jwtHandler.GenerateToken(new User()
             {
                 Id = -1,
-                UniqueIdentifier = Guid.NewGuid(),
+                UniqueIdentifier = Guid.Parse("7935ccc5-6b4a-4d5f-a8ef-cb2e4e404598"),
                 UserName = "fakeUser",
                 Email = "fakeUserEmail",
                 Role = UserRole.Admin,

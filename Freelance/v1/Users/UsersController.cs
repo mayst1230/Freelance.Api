@@ -163,7 +163,7 @@ public class UsersController : ControllerBase
     /// <returns>Данные об авторизованном пользователе.</returns>
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<UserItem> LoginAsync([FromQuery] UserLoginRequest request)
+    public async Task<UserItem> LoginAsync(UserLoginRequest request)
     {
         if (!ModelState.IsValid)
             throw new ApiException();
@@ -198,20 +198,18 @@ public class UsersController : ControllerBase
 
 
     /// <summary>
-    /// Редактирование собственного профиля.
+    /// Редактирование профиля.
     /// </summary>
     /// <param name="request">Данные запроса.</param>
     /// <returns>Сведения об измененном пользователе.</returns>
-    [HttpPut("me/edit")]
+    [HttpPut("edit")]
     [Authorize]
     public async Task<UserItem> EditAsync(UserEditRequest request)
     {
         if (!ModelState.IsValid)
             throw new ApiException();
 
-        var userUuid = User.GetUserUuid() ?? throw new InvalidOperationException();
-
-        var user = await _dataContext.Users.Where(i => i.UniqueIdentifier == userUuid)
+        var user = await _dataContext.Users.Where(i => i.UniqueIdentifier == request.UserUniqueIdentifier)
                                            .Include(i => i.PhotoFile)
                                            .FirstOrDefaultAsync() ?? throw new ApiNotFoundException("Пользователь не найден.");
 

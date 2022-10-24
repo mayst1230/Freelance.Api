@@ -456,3 +456,4 @@ D:\GIT\Freelance.Api\Freelance.Tests\bin\Debug\net6.0\Freelance.Core.pdb
 D:\GIT\Freelance.Api\Freelance.Tests\bin\Debug\net6.0\Freelance.Api.pdb
 D:\GIT\Freelance.Api\Freelance.Tests\bin\Debug\net6.0\Freelance.Api.xml
 D:\GIT\Freelance.Api\Freelance.Tests\obj\Debug\net6.0\Freelance.Tests.MvcApplicationPartsAssemblyInfo.cs
+D:\GIT\Freelance.Api\Freelance.Tests\bin\Debug\net6.0\appsettings.Development.json

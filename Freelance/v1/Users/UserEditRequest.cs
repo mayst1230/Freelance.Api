@@ -11,6 +11,12 @@ public class UserEditRequest
     /// Имя пользователя.
     /// </summary>
     [Required]
+    public Guid UserUniqueIdentifier { get; set; }
+
+    /// <summary>
+    /// Имя пользователя.
+    /// </summary>
+    [Required]
     [MinLength(6)]
     [MaxLength(100)]
     public string UserName { get; set; } = string.Empty;

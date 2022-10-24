@@ -1161,6 +1161,11 @@
             Запрос на редактирование пользователя.
             </summary>
         </member>
+        <member name="P:Freelance.Api.v1.Users.UserEditRequest.UserUniqueIdentifier">
+            <summary>
+            Имя пользователя.
+            </summary>
+        </member>
         <member name="P:Freelance.Api.v1.Users.UserEditRequest.UserName">
             <summary>
             Имя пользователя.
@@ -1446,7 +1451,7 @@
         </member>
         <member name="M:Freelance.Api.v1.Users.UsersController.EditAsync(Freelance.Api.v1.Users.UserEditRequest)">
             <summary>
-            Редактирование собственного профиля.
+            Редактирование профиля.
             </summary>
             <param name="request">Данные запроса.</param>
             <returns>Сведения об измененном пользователе.</returns>

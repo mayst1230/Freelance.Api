@@ -1,15 +1,13 @@
 ﻿using Freelance.Api.v1.Users;
 using Freelance.Core.Models.Storage;
-using Newtonsoft.Json;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Xunit;
 
 namespace Freelance.Tests.IntegrationTests;
 
-[TestCaseOrderer("FreelanceTests.Helpers.AlphabeticalTestCaseOrderer", "FreelanceTests.Tests")]
+[TestCaseOrderer("Freelance.Tests.Helpers.AlphabeticalTestCaseOrderer", "Freelance.Tests")]
 [Collection("Non-Parallel Collection")]
 public class ApiUsersTests : IClassFixture<CustomWebApplicationFactory<Program, ApiUsersTests>>
 {
@@ -44,7 +42,7 @@ public class ApiUsersTests : IClassFixture<CustomWebApplicationFactory<Program, 
     }
 
     [Fact]
-    public async Task Test1_Create_User()
+    public async Task Test1_RegisterUser()
     {
         // Arrange
         var httpClient = await GetHttpClientWithTokenAsync();
@@ -76,7 +74,59 @@ public class ApiUsersTests : IClassFixture<CustomWebApplicationFactory<Program, 
     }
 
     [Fact]
-    public async Task Test2_Unauthorize_List_Users()
+    public async Task Test2_LoginUser()
+    {
+        // Arrange
+        var httpClient = GetHttpClientWithoutToken();
+
+        var content = JsonContent.Create(new UserLoginRequest()
+        {
+            Password = "testAdmin",
+            UserName = "testAdmin",
+        }, options: _jsonSerializerOptions);
+
+        // Act
+        var responseLogin = await httpClient.PostAsync("https://localhost:7008/v1/Users/login", content);
+        responseLogin.EnsureSuccessStatusCode();
+        var userLoginInfo = await responseLogin.Content.ReadFromJsonAsync<UserItem>(_jsonSerializerOptions);
+
+        // Assert
+        Assert.NotNull(userLoginInfo);
+    }
+
+    [Fact]
+    public async Task Test3_EditUser()
+    {
+        // Arrange
+        var httpClient = await GetHttpClientWithTokenAsync();
+        var content = JsonContent.Create(new UserEditRequest()
+        {
+            UserUniqueIdentifier = _userUuid,
+            Email = "testAdmin@example.ru",
+            FirstName = "Test1",
+            MiddleName = "Test2",
+            LastName = "Test3",
+            Password = "testAdmin123",
+            UserName = "testAdmin123",
+            PhotoFileId = null,
+        }, options: _jsonSerializerOptions);
+
+        // Act
+        var userDetailsOld = await httpClient.GetFromJsonAsync<UserItem>("https://localhost:7008/v1/Users/" + _userUuid, _jsonSerializerOptions);
+        var responseEdit = await httpClient.PutAsync("https://localhost:7008/v1/Users/edit", content);
+        responseEdit.EnsureSuccessStatusCode();
+        var userEditInfo = await responseEdit.Content.ReadFromJsonAsync<UserItem>(_jsonSerializerOptions);
+
+        // Assert
+        Assert.NotNull(userEditInfo);
+        Assert.Equal(userEditInfo?.FirstName, userDetailsOld?.FirstName);
+        Assert.Equal(userEditInfo?.MiddleName, userDetailsOld?.MiddleName);
+        Assert.Equal(userEditInfo?.LastName, userDetailsOld?.LastName);
+        Assert.NotEqual(userEditInfo?.UserName, userDetailsOld?.UserName);
+    }
+
+    [Fact]
+    public async Task Test4_UnauthorizeListUsers()
     {
         // Arrange
         var httpClient = GetHttpClientWithoutToken();
@@ -89,7 +139,7 @@ public class ApiUsersTests : IClassFixture<CustomWebApplicationFactory<Program, 
     }
 
     [Fact]
-    public async Task Test3_Authorize_List_Users()
+    public async Task Test5_AuthorizeListUsers()
     {
         // Arrange
         var httpClient = await GetHttpClientWithTokenAsync();
@@ -99,6 +149,7 @@ public class ApiUsersTests : IClassFixture<CustomWebApplicationFactory<Program, 
 
         // Assert
         Assert.NotNull(listUsers);
+        Assert.Equal(4, listUsers?.TotalCount);
         Assert.Equal("test1", listUsers?.Items[0].UserName);
         Assert.Equal("test2", listUsers?.Items[1].UserName);
         Assert.Equal("test3", listUsers?.Items[2].UserName);
