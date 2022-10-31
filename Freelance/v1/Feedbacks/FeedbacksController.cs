@@ -61,6 +61,7 @@ public class FeedbacksController : ControllerBase
         result.TotalCount = await feedbacks.CountAsync();
         result.Items = await feedbacks.LimitOffset(request.Limit, request.Offset).Select(i => new FeedbackItem()
         {
+            UniqueIdentifier = i.UniqueIdentifier,
             UserFeedback = new UserReferenceItem()
             {
                 UniqueIdentifier = i.User.UniqueIdentifier,
@@ -107,17 +108,16 @@ public class FeedbacksController : ControllerBase
     /// <summary>
     /// Создание отзыва.
     /// </summary>
-    /// <param name="userUuid">УИД пользователя.</param>
     /// <param name="request">Данные запроса.</param>
     /// <returns>Сведения о созданном отзыве.</returns>
-    [HttpPost]
-    public async Task<FeedbackCreateResponse> CreateAsync([FromQuery][Required] Guid userUuid, [FromBody] FeedbackCreateRequest request)
+    [HttpPost("create")]
+    public async Task<FeedbackItem> CreateAsync(FeedbackCreateRequest request)
     {
         if (!ModelState.IsValid)
             throw new ApiException();
 
         var userId = User.GetUserId() ?? throw new InvalidOperationException();
-        var feedbackUser = await _dataContext.Users.Where(i => i.UniqueIdentifier == userUuid).FirstOrDefaultAsync()
+        var feedbackUser = await _dataContext.Users.Where(i => i.UniqueIdentifier == request.UserUniqueIdentifier).FirstOrDefaultAsync()
             ?? throw new ApiException("Пользователь не найден.");
 
         if (await _dataContext.Feedbacks.Where(i => i.CreatedBy == userId && i.UserId == feedbackUser.Id).AnyAsync())
@@ -139,36 +139,24 @@ public class FeedbacksController : ControllerBase
         feedbackUser.Rating = await CalculateRatingSum(feedbackUser.Id);
         feedbackUser.Updated = DateTimeOffset.UtcNow;
 
-        _dataContext.Users.Update(feedbackUser);
         await _dataContext.SaveChangesAsync();
 
-        return new FeedbackCreateResponse()
-        {
-            UniqueIdentifier = feedback.UniqueIdentifier,
-            UserId = feedback.UserId,
-            Text = feedback.Text,
-            UserRating = feedback.UserRating,
-            CreatedBy = feedback.CreatedBy,
-            IsDeleted = feedback.IsDeleted,
-            Created = feedback.Created,
-            Updated = feedback.Updated,
-        };
+        return await GetDbItemAsync(feedback);
     }
 
     /// <summary>
     /// Изменение отзыва.
     /// </summary>
-    /// <param name="feedbackUuid">УИД отзыва.</param>
     /// <param name="request">Данные запроса.</param>
     /// <returns>Сведения об измененном отзыве.</returns>
-    [HttpPut]
-    public async Task<FeedbackEditResponse> EditAsync([FromQuery][Required] Guid feedbackUuid, [FromBody] FeedbackEditRequest request)
+    [HttpPut("edit")]
+    public async Task<FeedbackItem> EditAsync(FeedbackEditRequest request)
     {
         if (!ModelState.IsValid)
             throw new ApiException();
 
         var userId = User.GetUserId() ?? throw new InvalidOperationException();
-        var feedback = await _dataContext.Feedbacks.Where(i => i.UniqueIdentifier == feedbackUuid).FirstOrDefaultAsync()
+        var feedback = await _dataContext.Feedbacks.Where(i => i.UniqueIdentifier == request.FeedbackUuid).FirstOrDefaultAsync()
             ?? throw new ApiException("Отзыв не найден.");
 
         if (feedback.CreatedBy != userId)
@@ -178,7 +166,6 @@ public class FeedbacksController : ControllerBase
         feedback.Text = request.Text;
         feedback.Updated = DateTimeOffset.UtcNow;
 
-        _dataContext.Feedbacks.Update(feedback);
         await _dataContext.SaveChangesAsync();
 
         var feedbackUser = await _dataContext.Users.Where(i => i.Id == feedback.UserId).FirstOrDefaultAsync()
@@ -187,19 +174,77 @@ public class FeedbacksController : ControllerBase
         feedbackUser.Rating = await CalculateRatingSum(feedbackUser.Id);
         feedbackUser.Updated = DateTimeOffset.UtcNow;
 
-        _dataContext.Users.Update(feedbackUser);
         await _dataContext.SaveChangesAsync();
 
-        return new FeedbackEditResponse()
+        return await GetDbItemAsync(feedback);
+    }
+
+    /// <summary>
+    /// Получение сведений об отзыве.
+    /// </summary>
+    /// <param name="uuid">УИД отзыва.</param>
+    /// <returns>Сведения об отзыве.</returns>
+    [HttpGet("{uuid}")]
+    public async Task<FeedbackItem> DetailsAsync(Guid uuid)
+    {
+        var feedback = await _dataContext.Feedbacks.Where(i => i.UniqueIdentifier == uuid).FirstOrDefaultAsync()
+            ?? throw new ApiNotFoundException("Отзыв не найден.");
+
+        return await GetDbItemAsync(feedback);
+    }
+
+    /// <summary>
+    /// Сведения об отзыве.
+    /// </summary>
+    /// <param name="item">Отзыв.</param>
+    /// <returns>Сведения об отзыве.</returns>
+    private async Task<FeedbackItem> GetDbItemAsync(Feedback item)
+    {
+        var userFeedback = await _dataContext.Users.Where(i => i.Id == item.UserId).Include(i => i.PhotoFile).FirstOrDefaultAsync()
+            ?? throw new ApiNotFoundException("Пользователь, к которому относится отзыв не найден.");
+
+        var createdByUser = await _dataContext.Users.Where(i => i.Id == item.CreatedBy).Include(i => i.PhotoFile).FirstOrDefaultAsync()
+            ?? throw new ApiNotFoundException("Пользователь, создавший отзыв не найден.");
+
+        return new FeedbackItem()
         {
-            UniqueIdentifier = feedback.UniqueIdentifier,
-            UserId = feedback.UserId,
-            Text = feedback.Text,
-            UserRating = feedback.UserRating,
-            CreatedBy = feedback.CreatedBy,
-            IsDeleted = feedback.IsDeleted,
-            Created = feedback.Created,
-            Updated = feedback.Updated,
+            UniqueIdentifier = item.UniqueIdentifier,
+            UserFeedback = new UserReferenceItem()
+            {
+                UniqueIdentifier = userFeedback.UniqueIdentifier,
+                UserName = userFeedback.UserName,
+                Rating = userFeedback.Rating,
+                PhotoFile = userFeedback.PhotoFile != null ? new FileReferenceItem()
+                {
+                    UniqueIdentifier = userFeedback.PhotoFile.UniqueIdentifier,
+                    FileName = userFeedback.PhotoFile.FileName,
+                    DisplayName = userFeedback.PhotoFile.DisplayName,
+                    GroupType = userFeedback.PhotoFile.GroupType,
+                    MimeType = userFeedback.PhotoFile.MimeType,
+                    Size = userFeedback.PhotoFile.Size,
+                    Url = Url.Action("Download", "Files", new { fileUuid = userFeedback.PhotoFile.UniqueIdentifier })!
+                } : default,
+            },
+            Text = item.Text,
+            UserRating = item.UserRating,
+            CreatedBy = new UserReferenceItem()
+            {
+                UniqueIdentifier = createdByUser.UniqueIdentifier,
+                UserName = createdByUser.UserName,
+                Rating = createdByUser.Rating,
+                PhotoFile = createdByUser.PhotoFile != null ? new FileReferenceItem()
+                {
+                    UniqueIdentifier = createdByUser.PhotoFile.UniqueIdentifier,
+                    FileName = createdByUser.PhotoFile.FileName,
+                    DisplayName = createdByUser.PhotoFile.DisplayName,
+                    GroupType = createdByUser.PhotoFile.GroupType,
+                    MimeType = createdByUser.PhotoFile.MimeType,
+                    Size = createdByUser.PhotoFile.Size,
+                    Url = Url.Action("Download", "Files", new { fileUuid = createdByUser.PhotoFile.UniqueIdentifier })!
+                } : default,
+            },
+            Created = item.Created,
+            Updated = item.Updated,
         };
     }
 

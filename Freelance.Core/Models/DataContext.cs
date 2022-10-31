@@ -1,7 +1,6 @@
 ﻿using Freelance.Core.Models.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.Extensions.Configuration;
 
 #nullable disable
 
@@ -12,11 +11,9 @@ namespace Freelance.Core.Models;
 /// </summary>
 public class DataContext : DbContext
 {
-    private readonly IConfiguration _configuration;
-
-    public DataContext(DbContextOptions options, IConfiguration configuration) : base(options)
+    public DataContext(DbContextOptions options) : base(options)
     {
-        _configuration = configuration;
+
     }
 
     /// <summary>

@@ -8,6 +8,12 @@ namespace Freelance.Api.v1.Feedbacks;
 public class FeedbackCreateRequest
 {
     /// <summary>
+    /// УИД пользователя, к которому относится отзыв.
+    /// </summary>
+    [Required]
+    public Guid UserUniqueIdentifier { get; set; }
+
+    /// <summary>
     /// Текст.
     /// </summary>
     [Required]

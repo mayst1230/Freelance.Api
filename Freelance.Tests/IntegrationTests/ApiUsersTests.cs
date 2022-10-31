@@ -7,8 +7,8 @@ using Xunit;
 
 namespace Freelance.Tests.IntegrationTests;
 
-[TestCaseOrderer("Freelance.Tests.Helpers.AlphabeticalTestCaseOrderer", "Freelance.Tests")]
 [Collection("Non-Parallel Collection")]
+[TestCaseOrderer("Freelance.Tests.Helpers.AlphabeticalTestCaseOrderer", "Freelance.Tests")]
 public class ApiUsersTests : IClassFixture<CustomWebApplicationFactory<Program, ApiUsersTests>>
 {
     private readonly CustomWebApplicationFactory<Program, ApiUsersTests> _factory;
@@ -149,9 +149,6 @@ public class ApiUsersTests : IClassFixture<CustomWebApplicationFactory<Program, 
 
         // Assert
         Assert.NotNull(listUsers);
-        Assert.Equal(4, listUsers?.TotalCount);
-        Assert.Equal("test1", listUsers?.Items[0].UserName);
-        Assert.Equal("test2", listUsers?.Items[1].UserName);
-        Assert.Equal("test3", listUsers?.Items[2].UserName);
+        Assert.Equal(5, listUsers?.TotalCount);
     }
 }

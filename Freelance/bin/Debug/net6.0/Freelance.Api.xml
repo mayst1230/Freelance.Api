@@ -294,7 +294,6 @@
             </summary>
             <param name="fileUuid">Уникальный ИД файла.</param>
             <returns>Содержимое файла.</returns>
-            <exception cref="T:System.IO.FileNotFoundException"></exception>
         </member>
         <member name="M:Freelance.Api.Services.DataContextFileStorage.GetDetailsAsync(System.Guid)">
             <summary>
@@ -433,6 +432,11 @@
             Запрос на создание отзыва.
             </summary>
         </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackCreateRequest.UserUniqueIdentifier">
+            <summary>
+            УИД пользователя, к которому относится отзыв.
+            </summary>
+        </member>
         <member name="P:Freelance.Api.v1.Feedbacks.FeedbackCreateRequest.Text">
             <summary>
             Текст.
@@ -493,6 +497,11 @@
             Запрос на изменение отзыва.
             </summary>
         </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackEditRequest.FeedbackUuid">
+            <summary>
+            УИД отзыва.
+            </summary>
+        </member>
         <member name="P:Freelance.Api.v1.Feedbacks.FeedbackEditRequest.Text">
             <summary>
             Текст.
@@ -511,6 +520,11 @@
         <member name="T:Freelance.Api.v1.Feedbacks.FeedbackItem">
             <summary>
             Элемент отзыва.
+            </summary>
+        </member>
+        <member name="P:Freelance.Api.v1.Feedbacks.FeedbackItem.UniqueIdentifier">
+            <summary>
+            Уникальный ИД.
             </summary>
         </member>
         <member name="P:Freelance.Api.v1.Feedbacks.FeedbackItem.UserFeedback">
@@ -591,21 +605,33 @@
             <param name="request">Данные запроса.</param>
             <returns>Список отзывов.</returns>
         </member>
-        <member name="M:Freelance.Api.v1.Feedbacks.FeedbacksController.CreateAsync(System.Guid,Freelance.Api.v1.Feedbacks.FeedbackCreateRequest)">
+        <member name="M:Freelance.Api.v1.Feedbacks.FeedbacksController.CreateAsync(Freelance.Api.v1.Feedbacks.FeedbackCreateRequest)">
             <summary>
             Создание отзыва.
             </summary>
-            <param name="userUuid">УИД пользователя.</param>
             <param name="request">Данные запроса.</param>
             <returns>Сведения о созданном отзыве.</returns>
         </member>
-        <member name="M:Freelance.Api.v1.Feedbacks.FeedbacksController.EditAsync(System.Guid,Freelance.Api.v1.Feedbacks.FeedbackEditRequest)">
+        <member name="M:Freelance.Api.v1.Feedbacks.FeedbacksController.EditAsync(Freelance.Api.v1.Feedbacks.FeedbackEditRequest)">
             <summary>
             Изменение отзыва.
             </summary>
-            <param name="feedbackUuid">УИД отзыва.</param>
             <param name="request">Данные запроса.</param>
             <returns>Сведения об измененном отзыве.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Feedbacks.FeedbacksController.DetailsAsync(System.Guid)">
+            <summary>
+            Получение сведений об отзыве.
+            </summary>
+            <param name="uuid">УИД отзыва.</param>
+            <returns>Сведения об отзыве.</returns>
+        </member>
+        <member name="M:Freelance.Api.v1.Feedbacks.FeedbacksController.GetDbItemAsync(Freelance.Core.Models.Storage.Feedback)">
+            <summary>
+            Сведения об отзыве.
+            </summary>
+            <param name="item">Отзыв.</param>
+            <returns>Сведения об отзыве.</returns>
         </member>
         <member name="M:Freelance.Api.v1.Feedbacks.FeedbacksController.CalculateRatingSum(System.Int32)">
             <summary>

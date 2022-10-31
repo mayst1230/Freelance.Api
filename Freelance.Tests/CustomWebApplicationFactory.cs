@@ -28,7 +28,9 @@ public class CustomWebApplicationFactory<TStartup, TTestClass>
             // Add DataContext using an in-memory database for testing.
             services.AddDbContext<DataContext>(options =>
             {
-                options.UseSqlite($"Filename={typeof(TTestClass).Name}.db");
+                // Bad usage with decimal type ;(
+                // options.UseSqlite($"Filename={typeof(TTestClass).Name}.db");
+                options.UseNpgsql($"Host=localhost;Port=5432;Database={typeof(TTestClass).Name};Username=postgres;Password=postgres");
                 options.ConfigureWarnings(x => x.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.AmbientTransactionWarning));
             });
 

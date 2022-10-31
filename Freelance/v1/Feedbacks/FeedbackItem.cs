@@ -9,6 +9,12 @@ namespace Freelance.Api.v1.Feedbacks;
 public class FeedbackItem
 {
     /// <summary>
+    /// Уникальный ИД.
+    /// </summary>
+    [Required]
+    public Guid UniqueIdentifier { get; set; }
+
+    /// <summary>
     /// Пользователь, к которому относится отзыв.
     /// </summary>
     [Required]

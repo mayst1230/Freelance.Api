@@ -34,7 +34,6 @@ public class DataContextFileStorage : IFileStorage
     /// </summary>
     /// <param name="fileUuid">Уникальный ИД файла.</param>
     /// <returns>Содержимое файла.</returns>
-    /// <exception cref="FileNotFoundException"></exception>
     public async Task<(Stream data, string mime)> GetContentAsync(Guid fileUuid)
     {
         var file = await _dataContext.Files.FirstOrDefaultAsync(i => i.UniqueIdentifier == fileUuid);

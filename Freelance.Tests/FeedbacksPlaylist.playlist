@@ -1,0 +1,36 @@
+<Playlist Version="2.0">
+  <Rule Name="Includes" Match="Any">
+    <Rule Match="All">
+      <Property Name="Solution" />
+      <Rule Match="Any">
+        <Rule Match="All">
+          <Property Name="Project" Value="Freelance.Tests" />
+          <Rule Match="Any">
+            <Rule Match="All">
+              <Property Name="Namespace" Value="Freelance.Tests.IntegrationTests" />
+              <Rule Match="Any">
+                <Rule Match="All">
+                  <Property Name="Class" Value="ApiFeedbacksTests" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="Freelance.Tests.IntegrationTests.ApiFeedbacksTests.Test1_CreateFeedback" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="Freelance.Tests.IntegrationTests.ApiFeedbacksTests.Test1_CreateFeedback" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="Freelance.Tests.IntegrationTests.ApiFeedbacksTests.Test2_EditFeedback" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="Freelance.Tests.IntegrationTests.ApiFeedbacksTests.Test2_EditFeedback" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+              </Rule>
+            </Rule>
+          </Rule>
+        </Rule>
+      </Rule>
+    </Rule>
+  </Rule>
+</Playlist>
